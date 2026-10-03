@@ -9,6 +9,10 @@ Refactor and extension of the existing `app/verification` module (router → vie
 
 > **No approach here gives 100% protection.** The system collects evidence and reports a risk level.
 > It never fails a candidate on its own during the exam; a person reviews flagged sessions.
+>
+> **Stream integrity / virtual-camera injection detection is not currently implemented.** Video fed in through a
+> virtual camera (a recording or a real-time deepfake) bypasses passive PAD, which only detects faces re-captured
+> from a photo or screen. Deepfake detection is not implemented either. See section 4.
 
 ---
 
@@ -16,7 +20,7 @@ Refactor and extension of the existing `app/verification` module (router → vie
 
 ```bash
 pip install -r requirements.txt          # Python 3.10+; CPU only is fine
-python -m pytest -q                      # 48 tests, ~9 min on CPU (models download on first run)
+python -m pytest -q                      # 54 tests, ~9 min on CPU (models download on first run)
 uvicorn server:app --port 8000           # standalone API (see section 3)
 python tools/webcam_demo.py pad          # live anti-spoofing score on your webcam
 ```
@@ -200,6 +204,8 @@ python -m pytest -q
 * `test_registration_liveness.py`: ordering, wrong order, missing action, "do every movement" recording, spontaneous blinks,
   mirroring, nonce single-use and expiry.
 * `test_risk_engine.py`: one weak signal → only SUSPICIOUS; persistence → HIGH_RISK; relaxing back to NORMAL.
+* `test_anti_spoof.py`: status from the median spoof score, quality-skipped frames are counted but never scored as attacks,
+  too few usable frames → INSUFFICIENT_QUALITY, and scores identical to InsightFace's own liveness wrapper.
 * `test_exam_flow.py`, `test_api.py`: end to end through the HTTP API, auth, upload deletion.
 
 Synthetic videos are generated from InsightFace's sample photos, so the tests need no personal data. They prove the **logic**, not
