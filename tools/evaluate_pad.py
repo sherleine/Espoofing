@@ -36,7 +36,7 @@ import cv2
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from app.verification import anti_spoof, face_tracking, main  # noqa: E402
+from app.verification import anti_spoof, face_tracking, faces  # noqa: E402
 
 BONA_FIDE = {"bona_fide", "real", "live", "genuine"}
 VIDEO_EXTS = {".mp4", ".webm", ".mov", ".mkv", ".avi"}
@@ -46,21 +46,16 @@ IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp"}
 def score_file(path, n_frames):
     if path.suffix.lower() in IMAGE_EXTS:
         img = cv2.imread(str(path))
-        frames = [main.resize(img)] if img is not None else []
+        frames = [faces.resize(img)] if img is not None else []
     else:
-        frames, _, _ = main.read_video(str(path), n_frames)
+        frames, _, _ = faces.read_video(str(path), n_frames)
     if not frames:
         return None
-    faces = [main.analyze_frame(f, landmarks=False, embedding=False) for f in frames]
-    primary = face_tracking.summarize(faces)["primary"]
-    # a single image cannot reach MIN_SCORED_FRAMES: score it on its own
-    min_frames = anti_spoof.MIN_SCORED_FRAMES
-    if len(frames) == 1:
-        anti_spoof.MIN_SCORED_FRAMES = 1
-    try:
-        return anti_spoof.detect_spoof(frames, primary)
-    finally:
-        anti_spoof.MIN_SCORED_FRAMES = min_frames
+    detected = [faces.analyze_frame(f, landmarks=False, embedding=False) for f in frames]
+    primary = face_tracking.summarize(detected)["primary"]
+    # a single image can never reach MIN_SCORED_FRAMES: score it on its own
+    min_frames = 1 if len(frames) == 1 else anti_spoof.MIN_SCORED_FRAMES
+    return anti_spoof.detect_spoof(frames, primary, min_scored_frames=min_frames)
 
 
 def rates(bona, attacks, thr):

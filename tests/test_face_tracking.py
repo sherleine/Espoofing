@@ -46,11 +46,9 @@ def test_exam_tracker_identity_and_continuity():
     assert other["identity"] == "MISMATCH" and other["continuity"] == "CHANGED"
 
 
-def test_exam_tracker_absence_forces_identity_check():
+def test_exam_tracker_reports_face_returning():
     t = ft.ExamTracker(unit([1, 0]))
-    t.update("ONE", None)
-    assert not t.needs_identity_check()
-    t.update("NONE", None)
-    assert t.needs_identity_check()
+    assert not t.update("ONE", unit([1, 0]))["face_returned"]
+    assert t.update("NONE", None)["absent_windows"] == 1
     back = t.update("ONE", unit([1, 0]))
-    assert back["face_returned"] and not t.needs_identity_check()
+    assert back["face_returned"] and back["absent_windows"] == 0

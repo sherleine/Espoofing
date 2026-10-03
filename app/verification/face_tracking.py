@@ -1,33 +1,20 @@
 # app/verification/face_tracking.py
 """
-Face presence, face count and same-person continuity.
-
-Registration: `summarize()` + `check_presence()` + `consistency()` are the
-original checks from service.py (moved, not changed).
-
-Exam: `ExamTracker` keeps a little state per exam session and turns each
-window of frames into categorical facts for the risk engine:
-
-    face_count  NONE | ONE | MULTIPLE
-    identity    MATCH | MISMATCH | UNKNOWN      (vs the registered reference)
-    continuity  STABLE | CHANGED | UNKNOWN      (vs the previous window's face)
+Face presence, face count and same-person continuity, for one registration
+video (summarize, check_presence, consistency) and across exam windows
+(ExamTracker).
 """
 
 import numpy as np
 
 from app.verification.face_verification import SIMILARITY_THRESHOLD, largest, similarity
 
-# ---------------------------------------------------------------------------
-# Registration thresholds (unchanged from the original service.py)
-# ---------------------------------------------------------------------------
 SAME_PERSON_THRESHOLD = 0.50    # every video face vs the video's mean face
 MIN_FACE_FRAME_RATIO = 0.6      # face must be visible in 60% of frames
 MAX_MULTI_FACE_RATIO = 0.2      # >20% frames with 2+ faces -> reject
-MIN_FACE_FRAMES = 5             # (was MIN_FRAMES // 2)
+MIN_FACE_FRAMES = 5
 
-# ---------------------------------------------------------------------------
-# Exam thresholds (placeholders: calibrate on real exam data)
-# ---------------------------------------------------------------------------
+# Exam - placeholders, calibrate on real exam data
 EXAM_MIN_FACE_RATIO = 0.3       # below this a window counts as "no face"
 EXAM_MULTI_FACE_RATIO = 0.3     # at/above this a window counts as "multiple faces"
 EXAM_MIN_REL_FACE_AREA = 0.04   # ignore extra faces smaller than 4% of the main face
@@ -85,11 +72,9 @@ def _area(face):
     return float((face.bbox[2] - face.bbox[0]) * (face.bbox[3] - face.bbox[1]))
 
 
-# ---------------------------------------------------------------------------
-# Exam-time tracking
-# ---------------------------------------------------------------------------
 class ExamTracker:
-    """Continuity state for one exam session."""
+    """Per exam session: turns each window into face_count (NONE | ONE |
+    MULTIPLE), identity vs the reference and continuity vs the last window."""
 
     def __init__(self, reference_embedding):
         self.reference = reference_embedding
@@ -102,11 +87,6 @@ class ExamTracker:
         if summary["multi_face_ratio"] >= EXAM_MULTI_FACE_RATIO:
             return "MULTIPLE"
         return "ONE"
-
-    def needs_identity_check(self):
-        """True when the face just came back after being absent: the moment a
-        swap is most likely, so identity must be sampled now."""
-        return self.absent_windows > 0
 
     def update(self, face_count, embedding):
         """Feed one window. `embedding` is the identity sample taken in this

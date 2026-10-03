@@ -5,14 +5,9 @@ import os
 
 from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, UploadFile
 
-from app.verification.view import (
-    end_exam,
-    exam_status,
-    exam_window,
-    get_challenge,
-    start_exam,
-    verify_email_photo,
-)
+from app.verification.main import EXAM_MAX_FRAMES, end_exam_session, get_exam_status
+from app.verification.registration_liveness import issue_challenge
+from app.verification.view import exam_window, start_exam, verify_email_photo
 
 # Only the .NET backend should call this service: it supplies the trusted
 # profile photo. Set VERIFICATION_SERVICE_KEY and send it as X-Service-Key.
@@ -32,7 +27,6 @@ router = APIRouter(dependencies=[Depends(require_service_key)])
 
 MAX_VIDEO_BYTES = 25 * 1024 * 1024   # 25 MB
 MAX_WINDOW_BYTES = 8 * 1024 * 1024   # one exam window (frames or clip)
-MAX_WINDOW_FRAMES = 32
 
 
 @router.post("/verify-email-photo")
@@ -64,12 +58,10 @@ async def verify_email_photo_endpoint(
 @router.get("/verification/challenge")
 async def challenge_endpoint():
     """Random ordered actions + single-use nonce for registration liveness."""
-    return get_challenge()
+    return issue_challenge()
 
 
-# ---------------------------------------------------------------------------
-# Exam monitoring (passive - the candidate is never asked to do anything)
-# ---------------------------------------------------------------------------
+# Exam monitoring is passive: the candidate is never asked to do anything.
 @router.post("/exam/session/start")
 async def exam_start_endpoint(
     email: str = Form(...),
@@ -86,8 +78,8 @@ async def exam_window_endpoint(
     clip: UploadFile | None = File(None),           # or one short video clip
 ):
     if frames:
-        if len(frames) > MAX_WINDOW_FRAMES:
-            raise HTTPException(status_code=413, detail=f"At most {MAX_WINDOW_FRAMES} frames per window")
+        if len(frames) > EXAM_MAX_FRAMES:
+            raise HTTPException(status_code=413, detail=f"At most {EXAM_MAX_FRAMES} frames per window")
         images = [await f.read() for f in frames]
         if sum(len(b) for b in images) > MAX_WINDOW_BYTES:
             raise HTTPException(status_code=413, detail="Window too large")
@@ -102,9 +94,9 @@ async def exam_window_endpoint(
 
 @router.get("/exam/session/{session_id}")
 async def exam_status_endpoint(session_id: str):
-    return exam_status(session_id)
+    return get_exam_status(session_id)
 
 
 @router.post("/exam/session/{session_id}/end")
 async def exam_end_endpoint(session_id: str):
-    return end_exam(session_id)
+    return end_exam_session(session_id)

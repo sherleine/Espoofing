@@ -29,7 +29,7 @@ from pathlib import Path
 import cv2
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from app.verification import anti_spoof, face_verification, main, registration_liveness  # noqa: E402
+from app.verification import anti_spoof, face_verification, faces, main, registration_liveness  # noqa: E402
 
 LABEL_KEYS = {ord("b"): "bona_fide", ord("p"): "print", ord("m"): "mobile",
               ord("s"): "screen", ord("o"): "other_attack"}
@@ -111,11 +111,11 @@ def main_loop(args):
 
     def set_profile(img):
         nonlocal profile, profile_emb, session_id
-        faces = main.analyze_frame(main.resize(img), landmarks=False)
-        if not faces:
+        detected = faces.analyze_frame(faces.resize(img), landmarks=False)
+        if not detected:
             print("no face in profile image")
             return
-        profile, profile_emb = img.copy(), face_verification.largest(faces).normed_embedding
+        profile, profile_emb = img.copy(), face_verification.largest(detected).normed_embedding
         if args.mode == "exam":
             if session_id:
                 main.end_exam_session(session_id)
@@ -137,23 +137,23 @@ def main_loop(args):
         view = frame.copy()
 
         # --- live per-frame view: faces + PAD score of the main face ---------
-        faces = main.analyze_frame(main.resize(frame), landmarks=False, embedding=False,
+        detected = faces.analyze_frame(faces.resize(frame), landmarks=False, embedding=False,
                                    det_size=main.EXAM_DET_SIZE)
-        small = main.resize(frame)
+        small = faces.resize(frame)
         scale = frame.shape[1] / small.shape[1]
-        if faces:
-            face = face_verification.largest(faces)
-            good, why, _ = anti_spoof.face_quality(small, face)
+        if detected:
+            face = face_verification.largest(detected)
+            good, why, _ = faces.face_quality(small, face)
             score = None
             if good:
-                p = anti_spoof.BACKENDS[0].live_probabilities([small], [face])[0]
+                p = anti_spoof.live_probabilities([small], [face])[0]
                 score = None if p is None else 1.0 - p
             status = pad_status(score)
-            for f in faces:
+            for f in detected:
                 x1, y1, x2, y2 = (f.bbox * scale).astype(int)
                 cv2.rectangle(view, (x1, y1), (x2, y2), COLORS[status] if f is face else (200, 200, 200), 2)
-            _, yaw = registration_liveness.pose(face)
-            text(view, f"faces={len(faces)}  spoof={'-' if score is None else f'{score:.3f}'}  "
+            _, yaw = faces.pose(face)
+            text(view, f"faces={len(detected)}  spoof={'-' if score is None else f'{score:.3f}'}  "
                        f"[{status if good else why}]  yaw~{yaw:+.0f}", 25, COLORS[status])
         else:
             text(view, "no face", 25, (160, 160, 160))
@@ -190,7 +190,7 @@ def main_loop(args):
                     profile_path = t.name
                 cv2.imwrite(profile_path, profile)
                 work.run(lambda p=profile_path, v=str(reg_path), n=challenge["nonce"]:
-                         main.verify_candidate(p, v, "registration", challenge_nonce=n))
+                         main.verify_registration(p, v, n))
                 challenge, banner, detail = None, "verifying...", []
         if args.mode == "register" and not challenge and work.result:
             r, work.result = work.result, None

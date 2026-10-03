@@ -28,6 +28,10 @@ For offline servers, copy those folders across (set `PAD_MODEL_PATH` if the PAD 
 `app.verification.router.router` as today. **Do not copy `app/monitor/session_store.py`**: it is a stand-in so this prototype runs on its own.
 `server.py` exists only for standalone testing.
 
+> **Run one worker process.** Challenges and exam sessions are kept in process memory. With several uvicorn/gunicorn
+> workers, a challenge issued by one worker is unknown to the next (`CHALLENGE_INVALID`) and exam windows can land on a
+> worker that has no session. Moving both stores to Redis fixes this; it is not done yet.
+
 ---
 
 ## 2. Architecture
@@ -36,28 +40,34 @@ For offline servers, copy those folders across (set `PAD_MODEL_PATH` if the PAD 
 router.py ─► view.py ─► service.py (compatibility wrapper: verify_faces)
                 │
                 ▼
-             main.py  ── single orchestrator; runs InsightFace ONCE per frame
+             main.py  ── verification flow: which checks run, in what order
+                │
+             faces.py ── decode input, detect faces ONCE per frame (InsightFace)
                 │
    ┌────────────┼──────────────┬─────────────────┬──────────────┐
    ▼            ▼              ▼                 ▼              ▼
 face_verification  registration_liveness  face_tracking   anti_spoof    risk_engine
 identity only      active challenge       face count,     passive PAD   NORMAL /
-(embeddings)       (registration only)    continuity      (swappable)   SUSPICIOUS /
+(embeddings)       (registration only)    continuity      (one model)   SUSPICIOUS /
                                                                          HIGH_RISK
 ```
 
 | Module | Responsibility | Not responsible for |
 |---|---|---|
-| `main.py` | Loads models, decodes video/images, detects faces, calls the modules, sessions | Any detection logic |
+| `main.py` | Registration flow, exam flow, exam session store | Detection, PAD, tracking or risk details |
+| `faces.py` | Loads InsightFace once, decodes video/images, detects faces, embeddings, face quality, head pose | Decisions |
 | `face_verification.py` | Cosine similarity live vs profile, match decision | Liveness |
 | `registration_liveness.py` | Challenge issue/consume (single-use nonce), ordered action check, legacy movement check | Exam time (never used there) |
 | `face_tracking.py` | Face presence/count, same-person consistency, exam continuity (`ExamTracker`) | Spoofing |
-| `anti_spoof.py` | Passive PAD: `detect_spoof(frames, faces)`, frame quality gate, pluggable model backends | Injection / virtual cameras |
+| `anti_spoof.py` | Passive PAD: `detect_spoof(frames, faces)` with one ONNX model | Injection / virtual cameras |
 | `risk_engine.py` | Explainable k-of-n rules over recent windows → state, reasons, recommended action | Final decisions (policy is the exam platform's) |
 
-**Replacing the PAD model:** add a class to `anti_spoof.py` with `name`, `version` and
-`live_probabilities(frames, faces) -> list[float | None]`, and put it in `BACKENDS` (several = averaged).
-Nothing else changes.
+**Replacing the PAD model:** change `load_model()` and `live_probabilities()` in `anti_spoof.py`.
+`detect_spoof()` and everything that calls it stay the same.
+
+**Entry points** (Python): `verify_registration(profile_photo_path, video_path, challenge_nonce)` for registration;
+`start_exam_session`, `process_exam_window`, `get_exam_status`, `end_exam_session` for the exam. `service.verify_faces()`
+is kept for existing callers.
 
 ---
 
@@ -80,7 +90,8 @@ Without the variable, the endpoints are open (development only; a warning is log
 The response keeps every existing key (`verified`, `is_match`, `reason_code`, `reason`, `failed_checks`, `live`,
 `identity_match`, `similarity`, `identity`, `liveness`, `video`) and adds:
 
-* `anti_spoof` — passive PAD result (`status`, `spoof_score`, `confidence`, `frames_scored`, …)
+* `anti_spoof` — passive PAD result: `status`, `spoof_score`, `frames_scored`, `frames_skipped`, `frame_scores`.
+  There is no `confidence`: the scores are not calibrated yet, so a confidence number would claim more than we know.
 * `challenge` — only when a nonce was sent: steps, `passed`, `failure`, matched/detected actions with times
 
 New `reason_code` values (the frontend should show `reason` for unknown codes):
@@ -91,7 +102,6 @@ New `reason_code` values (the frontend should show `reason` for unknown codes):
 | `CHALLENGE_INVALID` | nonce unknown, expired (3 min) or already used — nonces are single use |
 | `CHALLENGE_MISSING` | no nonce while `VERIFICATION_REQUIRE_CHALLENGE=1` |
 | `SPOOF_SUSPECTED` | PAD status `HIGH_RISK` (switch off with `PAD_ENFORCE_REGISTRATION=0`) |
-| `VIDEO_QUALITY_TOO_LOW` | PAD could not score the video (only with `PAD_REQUIRE_QUALITY_AT_REGISTRATION=1`) |
 
 Without a nonce the old "did the head/face move at all" check runs, with the same results as before
 (verified by `tests/test_legacy_compat.py` against a frozen copy of the original `service.py`).
@@ -146,8 +156,7 @@ Window response (shortened):
     "face_count": "ONE", "identity": "MATCH", "continuity": "STABLE",
     "reference_similarity": 0.71, "previous_similarity": 0.83,
     "face_returned": false, "absent_windows": 0,
-    "pad": {"status": "ELEVATED", "spoof_score": 0.27, "confidence": 0.75, "frames_scored": 8},
-    "integrity": "NOT_CHECKED"
+    "pad": {"status": "ELEVATED", "spoof_score": 0.27, "frames_scored": 8, "frames_skipped": {}}
   },
   "faces": {"frames_sampled": 8, "frames_with_face": 8, "face_ratio": 1.0, "multi_face_ratio": 0.0},
   "processing_ms": 1180
@@ -176,7 +185,7 @@ or move `_sessions` and the challenge store to Redis (both are small dicts, mark
 
 **PAD vs injection:** passive PAD analyses a *physical scene* filmed by a camera. Injection attacks (OBS Virtual Camera,
 real-time face-swap apps) replace the camera feed itself, so PAD has nothing to detect. Stream-integrity checks are a separate workstream
-(section 9). The `integrity` signal is already wired into the risk engine as `NOT_CHECKED`.
+(section 9). The risk engine has no integrity signal yet; one will be added when the checks exist.
 
 ---
 
@@ -242,7 +251,6 @@ Every threshold is a **placeholder** and marked as such in the code:
 | `VERIFICATION_REQUIRE_CHALLENGE` | `0` | `1` = registration without a nonce fails |
 | `VERIFICATION_MIRRORED_INPUT` | `0` | `1` if the client records a mirrored stream |
 | `PAD_ENFORCE_REGISTRATION` | `1` | PAD `HIGH_RISK` fails registration with `SPOOF_SUSPECTED` |
-| `PAD_REQUIRE_QUALITY_AT_REGISTRATION` | `0` | `1` = an unscorable video fails registration |
 | `PAD_MODEL_PATH` | `~/.insightface/addons/liveness.onnx` | PAD model location (downloaded and checksum-verified if missing) |
 | `VERIFICATION_KEEP_UPLOADS` | `0` | `1` keeps uploaded photo/video files (e.g. to build a test set) |
 
@@ -271,15 +279,18 @@ For many concurrent candidates, run exam windows in a worker queue rather than i
 
 InsightFace's code is MIT, but its documentation says its **pretrained models are for non-commercial research only**.
 That covers `buffalo_l`, **which the current production code already uses**, and the PAD model `liveness.onnx`.
-Options: buy a commercial licence from InsightFace, or swap the models. The PAD model can be swapped through `BACKENDS`.
+Options: buy a commercial licence from InsightFace, or swap the models. The PAD model can be swapped in `anti_spoof.py` alone.
 A candidate is MiniFASNet (Silent-Face-Anti-Spoofing, Apache-2.0 per its repository — verify), which would need converting to ONNX.
 Public anti-spoofing datasets (CelebA-Spoof, OULU-NPU, SiW, Replay-Attack) are mostly academic licences too,
 which matters if you fine-tune on them.
 
 ## Privacy
 
+* Logs contain no email, images or embeddings: registrations are logged by exam ID, exam windows by session ID,
+  and only windows that change or raise the risk state are logged.
 * Uploaded photos and videos are now **deleted after verification**. They used to be kept forever in `uploads/verification/`.
-* Exam frames are processed in memory and never written to disk. Sessions keep only one reference embedding, the risk history and an event log.
+* Exam frames sent as images are processed in memory. A window sent as a video clip is written to a temporary file
+  for decoding and deleted straight away. Sessions keep only one reference embedding, the risk history and an event log.
 * Face images and embeddings are biometric data (GDPR Art. 9 where it applies). You need a legal basis and a notice to candidates,
   short retention periods, and **human review before any consequence**.
 

@@ -1,7 +1,7 @@
 from app.verification.risk_engine import RiskState
 
 OK = {"face_count": "ONE", "identity": "MATCH", "continuity": "STABLE",
-      "pad": "LOW_RISK", "integrity": "NOT_CHECKED", "absent_windows": 0}
+      "pad": "LOW_RISK", "absent_windows": 0}
 
 
 def w(**changes):

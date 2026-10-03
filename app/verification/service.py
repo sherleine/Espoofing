@@ -1,17 +1,12 @@
 # app/verification/service.py
-"""
-Compatibility wrapper. The logic now lives in main.py and the capability
-modules (face_verification, registration_liveness, face_tracking,
-anti_spoof, risk_engine). Existing callers keep using verify_faces().
-"""
+"""Kept so existing callers of verify_faces/extract_frames keep working."""
 
-from app.verification.main import REASONS, read_video, verify_candidate  # noqa: F401
-from app.verification.main import TARGET_FRAMES
+from app.verification.faces import read_video
+from app.verification.main import REASONS, TARGET_FRAMES, verify_registration  # noqa: F401
 
 
 def verify_faces(profile_photo_path, video_path, challenge_nonce=None):
-    return verify_candidate(profile_photo_path, video_path, mode="registration",
-                            challenge_nonce=challenge_nonce)
+    return verify_registration(profile_photo_path, video_path, challenge_nonce)
 
 
 def extract_frames(video_path, target=TARGET_FRAMES):

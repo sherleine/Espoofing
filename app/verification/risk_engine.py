@@ -1,36 +1,17 @@
 # app/verification/risk_engine.py
 """
-Combines exam-time signals into one risk state. Deliberately simple rules,
-so every decision can be explained to a reviewer.
-
-Input per window (from face_tracking + anti_spoof):
-
-    face_count  NONE | ONE | MULTIPLE
-    identity    MATCH | MISMATCH | UNKNOWN
-    continuity  STABLE | CHANGED | UNKNOWN
-    pad         LOW_RISK | ELEVATED | HIGH_RISK | INSUFFICIENT_QUALITY | NOT_RUN
-    integrity   NOT_CHECKED (placeholder for the stream-integrity workstream)
-
-Output:
-
-    state               NORMAL | SUSPICIOUS | HIGH_RISK
-    reasons             codes that caused the state
-    recommended_action  from POLICY - the exam platform decides what to do
-    next_window_sec     when the client should send the next window
-
-Rules look at the last HISTORY windows, so one bad window never produces
-HIGH_RISK on its own (except when several independent signals fire together),
-and the state relaxes again once the evidence leaves the history.
-The candidate is never failed automatically.
+Combines exam-time signals into NORMAL | SUSPICIOUS | HIGH_RISK with simple
+rules a reviewer can follow. Rules look at the last HISTORY windows, so one
+bad window alone never gives HIGH_RISK (unless several independent signals
+fire together), and the state relaxes once the evidence ages out.
+It recommends an action; the exam platform decides what happens.
 """
 
 import random
 from collections import deque
 
-# ---------------------------------------------------------------------------
-# Rule settings - PLACEHOLDERS, calibrate on real exam sessions.
-# "k of n" = signal seen in at least k of the last n windows.
-# ---------------------------------------------------------------------------
+# Placeholders, calibrate on real exam sessions.
+# (k, n) = signal seen in at least k of the last n windows.
 HISTORY = 6
 ABSENT_SUSPICIOUS_WINDOWS = 2           # consecutive windows with no face
 MULTI_FACE_HIGH = (3, 6)
@@ -71,6 +52,20 @@ def _count(history, key, values, n=None, only=None):
     return sum(w[key] in values for w in windows)
 
 
+def _flags(window):
+    """Attack-related signals raised by one window."""
+    flags = set()
+    if window["face_count"] == "MULTIPLE":
+        flags.add("MULTIPLE_FACES")
+    if window["identity"] == "MISMATCH":
+        flags.add("IDENTITY_MISMATCH")
+    if window["continuity"] == "CHANGED":
+        flags.add("IDENTITY_CHANGED")
+    if window["pad"] in ("ELEVATED", "HIGH_RISK"):
+        flags.add("SPOOF_SUSPECTED")
+    return flags
+
+
 class RiskState:
     def __init__(self):
         self.history = deque(maxlen=HISTORY)
@@ -80,34 +75,17 @@ class RiskState:
         """Feed one window's signals; returns the assessment dict."""
         self.history.append(signals)
         h = self.history
+        window_flags = _flags(signals)
 
-        window_flags = []   # suspicious signals in THIS window (attack-related)
-        if signals["face_count"] == "MULTIPLE":
-            window_flags.append("MULTIPLE_FACES")
-        if signals["identity"] == "MISMATCH":
-            window_flags.append("IDENTITY_MISMATCH")
-        if signals["continuity"] == "CHANGED":
-            window_flags.append("IDENTITY_CHANGED")
-        if signals["pad"] in ("ELEVATED", "HIGH_RISK"):
-            window_flags.append("SPOOF_SUSPECTED")
-
-        suspicious = set(window_flags)
+        # anything raised by a window still in the history keeps the state at
+        # least SUSPICIOUS, so it relaxes only once the evidence has aged out
+        suspicious = set().union(*(_flags(w) for w in h))
         if signals.get("absent_windows", 0) >= ABSENT_SUSPICIOUS_WINDOWS:
             suspicious.add("CANDIDATE_ABSENT")
         recent_poor = list(h)[-POOR_QUALITY_SUSPICIOUS_WINDOWS:]
         if (len(recent_poor) == POOR_QUALITY_SUSPICIOUS_WINDOWS
                 and all(w["pad"] == "INSUFFICIENT_QUALITY" for w in recent_poor)):
             suspicious.add("POOR_VIDEO_QUALITY")
-        # earlier windows still in the history keep the state at least SUSPICIOUS
-        for w in list(h)[:-1]:
-            if w["face_count"] == "MULTIPLE":
-                suspicious.add("MULTIPLE_FACES")
-            if w["identity"] == "MISMATCH":
-                suspicious.add("IDENTITY_MISMATCH")
-            if w["continuity"] == "CHANGED":
-                suspicious.add("IDENTITY_CHANGED")
-            if w["pad"] in ("ELEVATED", "HIGH_RISK"):
-                suspicious.add("SPOOF_SUSPECTED")
 
         high = set()
         k, n = MULTI_FACE_HIGH

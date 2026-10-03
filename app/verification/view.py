@@ -1,4 +1,5 @@
 # app/verification/view.py
+import logging
 import os
 import re
 import tempfile
@@ -8,10 +9,11 @@ import cv2
 import numpy as np
 from fastapi.concurrency import run_in_threadpool
 
-from app.verification import main
-from app.verification.registration_liveness import issue_challenge
-from app.verification.service import verify_faces   # file is service.py, not services.py
+from app.verification import faces, main
+from app.verification.service import verify_faces
 from app.monitor.session_store import mark_verified
+
+log = logging.getLogger("app.verification")
 
 UPLOAD_DIR = "uploads/verification"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -81,15 +83,17 @@ async def verify_email_photo(
     _write(video_path, video_bytes)
 
     # InsightFace is CPU-heavy and blocking: keep it off the event loop.
+    started = time.perf_counter()
     try:
         result = await run_in_threadpool(verify_faces, photo_path, video_path, challenge_nonce)
     finally:
         _remove(photo_path, video_path)
 
-    print(f"[VERIFY] email={email} exam={examId} code={result['reason_code']} "
-          f"failed={result['failed_checks']} similarity={result.get('similarity')} "
-          f"pad={(result.get('anti_spoof') or {}).get('status')} "
-          f"liveness={result.get('liveness')}")
+    pad = result.get("anti_spoof") or {}
+    log.info("Registration verified: exam=%s code=%s failed=%s similarity=%s pad=%s "
+             "spoof_score=%s ms=%d",
+             examId, result["reason_code"], result["failed_checks"], result.get("similarity"),
+             pad.get("status"), pad.get("spoof_score"), (time.perf_counter() - started) * 1000)
 
     if result["verified"]:
         mark_verified(email)
@@ -100,13 +104,6 @@ async def verify_email_photo(
     }
 
 
-def get_challenge():
-    return issue_challenge()
-
-
-# ---------------------------------------------------------------------------
-# Exam monitoring
-# ---------------------------------------------------------------------------
 async def start_exam(email: str, examId: int, profile_photo_bytes: bytes):
     img = None
     if profile_photo_bytes:
@@ -119,18 +116,18 @@ def _clip_frames(clip_bytes: bytes, filename: str | None, content_type: str | No
     try:
         with os.fdopen(fd, "wb") as f:
             f.write(clip_bytes)
-        frames, times, _ = main.read_video(path, main.EXAM_MAX_FRAMES)
-        return frames, times
+        frames, _, _ = faces.read_video(path, main.EXAM_MAX_FRAMES)
+        return frames
     finally:
         os.remove(path)
 
 
 def _window(session_id, images, clip):
     if images:
-        frames, times = main.decode_images(images), None
+        frames = faces.decode_images(images)
     else:
-        frames, times = _clip_frames(*clip)
-    return main.verify_candidate(None, frames, mode="exam", session_id=session_id, timestamps=times)
+        frames = _clip_frames(*clip)
+    return main.process_exam_window(session_id, frames)
 
 
 async def exam_window(session_id: str, images: list[bytes] | None = None,
@@ -140,10 +137,3 @@ async def exam_window(session_id: str, images: list[bytes] | None = None,
         return {"ok": False, "reason_code": "NO_FRAMES", "reason": "Send frames or a clip"}
     return await run_in_threadpool(_window, session_id, images, clip)
 
-
-def exam_status(session_id: str):
-    return main.get_exam_status(session_id)
-
-
-def end_exam(session_id: str):
-    return main.end_exam_session(session_id)

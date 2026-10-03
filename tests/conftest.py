@@ -6,6 +6,7 @@ import os
 import sys
 from pathlib import Path
 
+import cv2
 import numpy as np
 import pytest
 
@@ -17,29 +18,23 @@ models = pytest.mark.skipif(not HAS_MODELS, reason="insightface not installed")
 
 
 @pytest.fixture(scope="session")
-def cv2():
-    import cv2 as _cv2
-    return _cv2
-
-
-@pytest.fixture(scope="session")
 def sample_dir():
     import insightface
     return Path(insightface.__file__).parent / "data" / "images"
 
 
 @pytest.fixture(scope="session")
-def group_photo(cv2, sample_dir):
+def group_photo(sample_dir):
     """t1.jpg: six people."""
     return cv2.imread(str(sample_dir / "t1.jpg"))
 
 
 @pytest.fixture(scope="session")
-def people(cv2, group_photo):
+def people(group_photo):
     """Two single-person, near-frontal crops (A, B) from the group photo,
     upscaled so the face is a realistic webcam size."""
-    from app.verification import main
-    faces = main.analyze_frame(group_photo, landmarks=True, embedding=False)
+    from app.verification.faces import analyze_frame
+    faces = analyze_frame(group_photo, landmarks=True, embedding=False)
     frontal = sorted(faces, key=lambda f: abs(float(f.pose[1])))[:2]
     crops = []
     h, w = group_photo.shape[:2]
@@ -59,11 +54,11 @@ def people(cv2, group_photo):
         c, d = int(max(cx - s, 0)), int(min(cx + s, w))
         crops.append(cv2.resize(img[a:b, c:d], (480, 480)))
     for crop in crops:
-        assert len(main.analyze_frame(crop, landmarks=False, embedding=False)) == 1
+        assert len(analyze_frame(crop, landmarks=False, embedding=False)) == 1
     return crops
 
 
-def jitter_frames(cv2, img, n, seed=0, shift=6.0, angle=2.0):
+def jitter_frames(img, n, seed=0, shift=6.0, angle=2.0):
     """`n` slightly moved copies of `img` (hand-held camera feel)."""
     rng = np.random.default_rng(seed)
     h, w = img.shape[:2]
@@ -75,7 +70,7 @@ def jitter_frames(cv2, img, n, seed=0, shift=6.0, angle=2.0):
     return out
 
 
-def write_video(cv2, path, frames, fps=15):
+def write_video(path, frames, fps=15):
     h, w = frames[0].shape[:2]
     writer = cv2.VideoWriter(str(path), cv2.VideoWriter_fourcc(*"mp4v"), fps, (w, h))
     assert writer.isOpened(), "OpenCV cannot write mp4v on this machine"
@@ -85,27 +80,27 @@ def write_video(cv2, path, frames, fps=15):
     return str(path)
 
 
-def write_image(cv2, path, img):
+def write_image(path, img):
     cv2.imwrite(str(path), img)
     return str(path)
 
 
 @pytest.fixture(scope="session")
-def media(tmp_path_factory, cv2, people, group_photo):
+def media(tmp_path_factory, people, group_photo):
     """Synthetic profile photos and videos covering the main outcomes."""
     d = tmp_path_factory.mktemp("media")
     a, b = people
     group = cv2.resize(group_photo, (960, 664))
     m = {
-        "profile_a": write_image(cv2, d / "profile_a.jpg", a),
-        "profile_b": write_image(cv2, d / "profile_b.jpg", b),
-        "profile_blank": write_image(cv2, d / "blank.jpg", np.full((480, 480, 3), 127, np.uint8)),
-        "video_a": write_video(cv2, d / "a.mp4", jitter_frames(cv2, a, 45, seed=1)),
-        "video_group": write_video(cv2, d / "group.mp4", jitter_frames(cv2, group, 45, seed=2)),
-        "video_swap": write_video(cv2, d / "swap.mp4",
-                                  jitter_frames(cv2, a, 23, seed=3) + jitter_frames(cv2, b, 22, seed=4)),
-        "video_short": write_video(cv2, d / "short.mp4", jitter_frames(cv2, a, 8, seed=5)),
-        "video_noface": write_video(cv2, d / "noface.mp4",
+        "profile_a": write_image(d / "profile_a.jpg", a),
+        "profile_b": write_image(d / "profile_b.jpg", b),
+        "profile_blank": write_image(d / "blank.jpg", np.full((480, 480, 3), 127, np.uint8)),
+        "video_a": write_video(d / "a.mp4", jitter_frames(a, 45, seed=1)),
+        "video_group": write_video(d / "group.mp4", jitter_frames(group, 45, seed=2)),
+        "video_swap": write_video(d / "swap.mp4",
+                                  jitter_frames(a, 23, seed=3) + jitter_frames(b, 22, seed=4)),
+        "video_short": write_video(d / "short.mp4", jitter_frames(a, 8, seed=5)),
+        "video_noface": write_video(d / "noface.mp4",
                                     [np.full((480, 480, 3), 90, np.uint8)] * 45),
     }
     corrupt = d / "corrupt.webm"

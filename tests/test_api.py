@@ -1,5 +1,6 @@
 """HTTP layer: auth, response compatibility, challenge flow, exam endpoints."""
 
+import cv2
 import pytest
 
 from conftest import jitter_frames, models
@@ -64,12 +65,12 @@ def test_challenge_flow(client, media):
 
 
 @models
-def test_exam_endpoints(client, media, people, cv2):
+def test_exam_endpoints(client, media, people):
     start = client.post("/exam/session/start", data={"email": "a@example.com", "examId": "1"},
                         files={"email_photo": ("p.jpg", open(media["profile_a"], "rb"), "image/jpeg")}).json()
     sid = start["session_id"]
     jpgs = [("frames", (f"{i}.jpg", cv2.imencode(".jpg", f)[1].tobytes(), "image/jpeg"))
-            for i, f in enumerate(jitter_frames(cv2, people[0], 6))]
+            for i, f in enumerate(jitter_frames(people[0], 6))]
     r = client.post(f"/exam/session/{sid}/window", files=jpgs).json()
     assert r["ok"] and r["state"] == "NORMAL" and r["signals"]["identity"] == "MATCH"
 
