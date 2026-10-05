@@ -7,11 +7,8 @@ from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, Uploa
 
 from app.verification.main import EXAM_MAX_FRAMES, end_exam_session, get_exam_status
 from app.verification.registration_liveness import issue_challenge
-from app.verification.view import exam_window, start_exam, verify_email_photo
+from app.verification.view import exam_window, start_exam, verify_email_photo, verify_pad
 
-# Only the .NET backend should call this service: it supplies the trusted
-# profile photo. Set VERIFICATION_SERVICE_KEY and send it as X-Service-Key.
-# Unset = no check (local development only).
 SERVICE_KEY = os.getenv("VERIFICATION_SERVICE_KEY", "")
 if not SERVICE_KEY:
     logging.getLogger("app.verification").warning(
@@ -25,8 +22,8 @@ def require_service_key(x_service_key: str = Header(default="")):
 
 router = APIRouter(dependencies=[Depends(require_service_key)])
 
-MAX_VIDEO_BYTES = 25 * 1024 * 1024   # 25 MB
-MAX_WINDOW_BYTES = 8 * 1024 * 1024   # one exam window (frames or clip)
+MAX_VIDEO_BYTES = 25 * 1024 * 1024
+MAX_WINDOW_BYTES = 8 * 1024 * 1024
 
 
 @router.post("/verify-email-photo")
@@ -34,15 +31,14 @@ async def verify_email_photo_endpoint(
     email: str = Form(...),
     examId: int = Form(...),
     email_photo: UploadFile = File(...),
-    live_photo: UploadFile = File(...),   # this is the selfie VIDEO (name kept for the frontend)
+    live_photo: UploadFile = File(...),
     challenge_nonce: str | None = Form(None),
 ):
-    """Run the complete registration verification in one API call.
+    """Complete registration verification in one API call.
 
-    The normal integration does not need to request a challenge first. The
-    uploaded video is checked for identity, natural facial movement and PAD
-    in the same request. A challenge nonce remains optional for clients that
-    want the stronger prompted liveness flow.
+    This call performs identity verification and registration liveness.
+    PAD is intentionally a separate call so the integration has at most two
+    verification requests: registration and PAD.
     """
     profile_bytes = await email_photo.read()
     video_bytes = await live_photo.read()
@@ -62,13 +58,28 @@ async def verify_email_photo_endpoint(
     )
 
 
+@router.post("/verify-pad")
+async def verify_pad_endpoint(
+    live_photo: UploadFile = File(...),
+):
+    """Run passive presentation-attack detection on the submitted video."""
+    video_bytes = await live_photo.read()
+    if len(video_bytes) > MAX_VIDEO_BYTES:
+        return {"ok": False, "reason_code": "VIDEO_TOO_LARGE",
+                "reason": "Video is larger than 25 MB"}
+
+    return await verify_pad(
+        video_bytes,
+        video_filename=live_photo.filename,
+        video_content_type=live_photo.content_type,
+    )
+
+
 @router.get("/verification/challenge")
 async def challenge_endpoint():
-    """Optional stronger liveness challenge; not required for registration."""
     return issue_challenge()
 
 
-# Exam monitoring is passive: the candidate is never asked to do anything.
 @router.post("/exam/session/start")
 async def exam_start_endpoint(
     email: str = Form(...),
@@ -81,8 +92,8 @@ async def exam_start_endpoint(
 @router.post("/exam/session/{session_id}/window")
 async def exam_window_endpoint(
     session_id: str,
-    frames: list[UploadFile] | None = File(None),   # JPEG/PNG snapshots, in time order
-    clip: UploadFile | None = File(None),           # or one short video clip
+    frames: list[UploadFile] | None = File(None),
+    clip: UploadFile | None = File(None),
 ):
     if frames:
         if len(frames) > EXAM_MAX_FRAMES:
