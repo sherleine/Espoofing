@@ -81,7 +81,6 @@ async def verify_email_photo(
 
     started = time.perf_counter()
     try:
-        # Registration call: identity + natural/active liveness only.
         result = await run_in_threadpool(
             verify_faces, photo_path, video_path, challenge_nonce, False
         )
@@ -92,9 +91,6 @@ async def verify_email_photo(
              examId, result["reason_code"], result["failed_checks"], result.get("similarity"),
              (time.perf_counter() - started) * 1000)
 
-    if result["verified"]:
-        mark_verified(email)
-
     return {
         **result,
         "is_match": result["verified"],
@@ -102,6 +98,7 @@ async def verify_email_photo(
 
 
 async def verify_pad(
+    email: str,
     video_bytes: bytes,
     video_filename: str | None = None,
     video_content_type: str | None = None,
@@ -119,7 +116,10 @@ async def verify_pad(
     finally:
         _remove(video_path)
 
-    return {"ok": True, "anti_spoof": result}
+    response = {"ok": True, "anti_spoof": result}
+    if result["status"] == "LOW_RISK":
+        mark_verified(email)
+    return response
 
 
 async def start_exam(email: str, examId: int, profile_photo_bytes: bytes):
