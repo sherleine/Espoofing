@@ -1,4 +1,3 @@
-# app/verification/main.py
 """
 Verification flow: which checks run, and in what order.
 Registration is one request (verify_registration); the exam is a session of
@@ -26,27 +25,23 @@ from app.verification import (
 
 log = logging.getLogger("app.verification")
 
-# Load the models at startup: the first request is not slowed down, and a
-# missing model fails here instead of during a candidate's verification.
 faces.load_models()
 anti_spoof.load_model()
 
-TARGET_FRAMES = 25              # frames sampled from the video (legacy mode)
-MIN_FRAMES = 10                 # minimum frames decoded
+TARGET_FRAMES = 25
+MIN_FRAMES = 10
 MIN_DURATION_SEC = 1.5
 
-CHALLENGE_TARGET_FRAMES = 40    # denser sampling so short blinks are not missed
-CHALLENGE_EMBED_FRAMES = 16     # identity needs fewer frames than liveness
+CHALLENGE_TARGET_FRAMES = 40
+CHALLENGE_EMBED_FRAMES = 16
 
-# Switch on once the frontend shows the challenge prompts.
 REQUIRE_CHALLENGE = os.getenv("VERIFICATION_REQUIRE_CHALLENGE", "0") == "1"
-# PAD HIGH_RISK fails registration; set to 0 to only report the PAD result.
 PAD_ENFORCE_REGISTRATION = os.getenv("PAD_ENFORCE_REGISTRATION", "1") == "1"
 
-EXAM_DET_SIZE = (480, 480)      # detection only, every exam frame
-EXAM_WINDOW_FRAMES = 8          # suggested frames per window ...
-EXAM_FRAME_INTERVAL_MS = 250    # ... ~4 fps -> a 2 s window
-EXAM_MAX_FRAMES = 32            # hard cap per window
+EXAM_DET_SIZE = (480, 480)
+EXAM_WINDOW_FRAMES = 8
+EXAM_FRAME_INTERVAL_MS = 250
+EXAM_MAX_FRAMES = 32
 SESSION_TTL_SEC = 6 * 3600
 
 REASONS = {
@@ -78,8 +73,7 @@ def _result(reason_code, failed_checks=None, **extra):
     }
 
 
-def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
-    # 1. Profile photo -------------------------------------------------------
+def verify_registration(profile_photo_path, video_path, challenge_nonce=None, include_pad=True):
     img = cv2.imread(profile_photo_path)
     if img is None:
         return _result("PROFILE_UNREADABLE")
@@ -88,7 +82,6 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
         return _result("NO_FACE_IN_PROFILE")
     profile = face_verification.largest(profile_faces)
 
-    # 2. Challenge (single use: consumed even if verification fails) ---------
     challenge = None
     if challenge_nonce:
         challenge, error = registration_liveness.consume_challenge(challenge_nonce)
@@ -97,7 +90,6 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
     elif REQUIRE_CHALLENGE:
         return _result("CHALLENGE_MISSING")
 
-    # 3. Video frames --------------------------------------------------------
     frames, times, video_info = faces.read_video(
         video_path, CHALLENGE_TARGET_FRAMES if challenge else TARGET_FRAMES)
     if not frames:
@@ -106,7 +98,6 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
     if len(frames) < MIN_FRAMES or (dur is not None and dur < MIN_DURATION_SEC):
         return _result("VIDEO_TOO_SHORT", video={**video_info, "frames_sampled": len(frames)})
 
-    # 4. Faces per frame, presence, face count -------------------------------
     faces_per_frame = [faces.analyze_frame(f, embedding=False) for f in frames]
     summary = face_tracking.summarize(faces_per_frame)
     video_info.update({
@@ -122,7 +113,6 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
     primary = summary["primary"]
     video_faces = [f for f in primary if f is not None]
 
-    # 5. Embeddings + same person throughout ---------------------------------
     with_face = [i for i, f in enumerate(primary) if f is not None]
     if challenge and len(with_face) > CHALLENGE_EMBED_FRAMES:
         pick = np.linspace(0, len(with_face) - 1, CHALLENGE_EMBED_FRAMES).astype(int)
@@ -131,7 +121,6 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
     consistency = face_tracking.consistency(emb)
     video_info["min_consistency"] = round(float(consistency.min()), 3)
 
-    # 6. Active liveness -----------------------------------------------------
     liveness, movement_failed = registration_liveness.movement_check(video_faces)
     challenge_block = None
     if challenge:
@@ -141,18 +130,11 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
     else:
         liveness_failed = movement_failed
 
-    # 7. Passive PAD ---------------------------------------------------------
-    pad = anti_spoof.detect_spoof(frames, primary)
-
-    # 8. Identity ------------------------------------------------------------
     identity, matched = face_verification.compare(emb, profile)
 
-    # Collect every failed check, report the most important first.
     failed = []
     if consistency.min() < face_tracking.SAME_PERSON_THRESHOLD:
         failed.append("DIFFERENT_PEOPLE_IN_VIDEO")
-    if PAD_ENFORCE_REGISTRATION and pad["status"] == "HIGH_RISK":
-        failed.append("SPOOF_SUSPECTED")
     failed += liveness_failed
     if not matched:
         failed.append("FACE_MISMATCH")
@@ -160,17 +142,60 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
     result = _result(
         failed[0] if failed else "OK",
         failed_checks=failed,
-        live=not liveness_failed and "SPOOF_SUSPECTED" not in failed,
+        live=not liveness_failed,
         identity_match=matched,
         similarity=identity["similarity"],
         identity=identity,
         liveness=liveness,
         video=video_info,
-        anti_spoof=pad,
     )
     if challenge_block:
         result["challenge"] = challenge_block
+
+    if include_pad:
+        pad = anti_spoof.detect_spoof(frames, primary)
+        result["anti_spoof"] = pad
+        if PAD_ENFORCE_REGISTRATION and pad["status"] == "HIGH_RISK":
+            result["failed_checks"].insert(0, "SPOOF_SUSPECTED")
+            result["reason_code"] = "SPOOF_SUSPECTED"
+            result["reason"] = REASONS["SPOOF_SUSPECTED"]
+            result["verified"] = False
+            result["live"] = False
+
     return result
+
+
+def run_pad(video_path):
+    frames, _, video_info = faces.read_video(video_path, TARGET_FRAMES)
+    if not frames:
+        return {
+            "status": "NOT_RUN",
+            "reason_code": "VIDEO_UNREADABLE",
+            "reason": REASONS["VIDEO_UNREADABLE"],
+            "frames_scored": 0,
+            "frames_skipped": 0,
+        }
+
+    faces_per_frame = [faces.analyze_frame(f, embedding=False) for f in frames]
+    summary = face_tracking.summarize(faces_per_frame)
+    if summary["frames_with_face"] == 0:
+        return {
+            "status": "NOT_RUN",
+            "reason_code": "NO_FACE",
+            "reason": "No face found in the video",
+            "frames_scored": 0,
+            "frames_skipped": len(frames),
+        }
+
+    pad = anti_spoof.detect_spoof(frames, summary["primary"])
+    return {
+        **pad,
+        "video": {
+            "frames_sampled": summary["frames_sampled"],
+            "frames_with_face": summary["frames_with_face"],
+            "face_ratio": round(summary["face_ratio"], 3),
+        },
+    }
 
 
 @dataclass
@@ -182,13 +207,11 @@ class ExamSession:
     risk: risk_engine.RiskState = field(default_factory=risk_engine.RiskState)
     last_seen: float = field(default_factory=time.time)
     windows: int = 0
-    events: list = field(default_factory=list)      # state changes + flagged windows
+    events: list = field(default_factory=list)
     last_assessment: dict | None = None
     lock: threading.Lock = field(default_factory=threading.Lock)
 
 
-# In memory, single process. With several API workers use a shared store
-# (Redis) or route a session's windows to the same worker.
 _sessions = {}
 _sessions_lock = threading.Lock()
 MAX_EVENTS = 500
@@ -203,7 +226,6 @@ def _get_session(session_id):
 
 
 def start_exam_session(email, exam_id, profile_image):
-    """`profile_image`: BGR image of the trusted profile photo."""
     if profile_image is None:
         return {"started": False, "reason_code": "PROFILE_UNREADABLE",
                 "reason": REASONS["PROFILE_UNREADABLE"]}
@@ -216,7 +238,7 @@ def start_exam_session(email, exam_id, profile_image):
     session = ExamSession(
         session_id=secrets.token_urlsafe(16), email=email, exam_id=exam_id,
         tracker=face_tracking.ExamTracker(reference))
-    _get_session(None)  # purge expired sessions
+    _get_session(None)
     with _sessions_lock:
         _sessions[session.session_id] = session
     log.info("Exam session started: session=%s exam=%s", session.session_id, exam_id)
@@ -230,8 +252,6 @@ def start_exam_session(email, exam_id, profile_image):
 
 
 def process_exam_window(session_id, frames):
-    """Analyse one short window of exam frames (BGR). Never blocks the exam:
-    the result is a risk assessment, not a pass/fail."""
     started = time.perf_counter()
     session = _get_session(session_id)
     if session is None:
@@ -241,7 +261,7 @@ def process_exam_window(session_id, frames):
     if not frames:
         return {"ok": False, "reason_code": "NO_FRAMES", "reason": "No decodable frames in window"}
 
-    with session.lock:  # windows of one session are processed in order
+    with session.lock:
         faces_per_frame = [faces.analyze_frame(f, landmarks=False, embedding=False, det_size=EXAM_DET_SIZE)
                            for f in frames]
         summary = face_tracking.summarize(faces_per_frame,
@@ -249,8 +269,6 @@ def process_exam_window(session_id, frames):
         tracker = session.tracker
         face_count = tracker.face_count(summary)
 
-        # One identity sample per window (~0.2 s on CPU) is affordable and
-        # catches a swap as soon as it happens.
         embedding = None
         if face_count != "NONE":
             picked = face_verification.pick_identity_face(frames, summary["primary"])
