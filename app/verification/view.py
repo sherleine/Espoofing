@@ -17,8 +17,6 @@ log = logging.getLogger("app.verification")
 
 UPLOAD_DIR = "uploads/verification"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-# Biometric data: uploads are deleted after verification unless explicitly kept
-# (e.g. while collecting a test dataset).
 KEEP_UPLOADS = os.getenv("VERIFICATION_KEEP_UPLOADS", "0") == "1"
 
 VIDEO_EXTS = {".mp4", ".webm", ".mov", ".mkv", ".avi"}
@@ -31,7 +29,6 @@ CONTENT_TYPE_EXT = {
 
 
 def _safe(name: str) -> str:
-    """Make a string safe to use in a file name (emails contain @ and dots)."""
     return re.sub(r"[^A-Za-z0-9_.-]", "_", name)
 
 
@@ -82,26 +79,47 @@ async def verify_email_photo(
     _write(photo_path, profile_photo_bytes)
     _write(video_path, video_bytes)
 
-    # InsightFace is CPU-heavy and blocking: keep it off the event loop.
     started = time.perf_counter()
     try:
-        result = await run_in_threadpool(verify_faces, photo_path, video_path, challenge_nonce)
+        # Registration call: identity + natural/active liveness only.
+        result = await run_in_threadpool(
+            verify_faces, photo_path, video_path, challenge_nonce, False
+        )
     finally:
         _remove(photo_path, video_path)
 
-    pad = result.get("anti_spoof") or {}
-    log.info("Registration verified: exam=%s code=%s failed=%s similarity=%s pad=%s "
-             "spoof_score=%s ms=%d",
+    log.info("Registration verified: exam=%s code=%s failed=%s similarity=%s ms=%d",
              examId, result["reason_code"], result["failed_checks"], result.get("similarity"),
-             pad.get("status"), pad.get("spoof_score"), (time.perf_counter() - started) * 1000)
+             (time.perf_counter() - started) * 1000)
 
     if result["verified"]:
         mark_verified(email)
 
     return {
         **result,
-        "is_match": result["verified"],   # kept for existing frontend code
+        "is_match": result["verified"],
     }
+
+
+async def verify_pad(
+    video_bytes: bytes,
+    video_filename: str | None = None,
+    video_content_type: str | None = None,
+):
+    if not video_bytes:
+        return {"ok": False, "reason_code": "VIDEO_UNREADABLE", "reason": "Video is empty"}
+
+    stamp = int(time.time() * 1000)
+    video_path = os.path.join(
+        UPLOAD_DIR, f"pad_{stamp}{_video_ext(video_filename, video_content_type)}"
+    )
+    _write(video_path, video_bytes)
+    try:
+        result = await run_in_threadpool(main.run_pad, video_path)
+    finally:
+        _remove(video_path)
+
+    return {"ok": True, "anti_spoof": result}
 
 
 async def start_exam(email: str, examId: int, profile_photo_bytes: bytes):
@@ -136,4 +154,3 @@ async def exam_window(session_id: str, images: list[bytes] | None = None,
     if not images and not (clip and clip[0]):
         return {"ok": False, "reason_code": "NO_FRAMES", "reason": "Send frames or a clip"}
     return await run_in_threadpool(_window, session_id, images, clip)
-
