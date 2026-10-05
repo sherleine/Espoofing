@@ -5,9 +5,9 @@ import os
 
 from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, UploadFile
 
-from app.verification.main import EXAM_MAX_FRAMES, end_exam_session, get_exam_status
+from app.verification.main import REASONS, EXAM_MAX_FRAMES, end_exam_session, get_exam_status
 from app.verification.registration_liveness import issue_challenge
-from app.verification.view import exam_window, start_exam, verify_email_photo
+from app.verification.view import exam_window, start_exam, verify_email_photo, verify_identity
 
 # Only the .NET backend should call this service: it supplies the trusted
 # profile photo. Set VERIFICATION_SERVICE_KEY and send it as X-Service-Key.
@@ -41,8 +41,7 @@ async def verify_email_photo_endpoint(
     video_bytes = await live_photo.read()
 
     if len(video_bytes) > MAX_VIDEO_BYTES:
-        return {"verified": False, "is_match": False, "reason_code": "VIDEO_TOO_LARGE",
-                "reason": "Video is larger than 25 MB", "failed_checks": ["VIDEO_TOO_LARGE"]}
+        return _video_too_large()
 
     return await verify_email_photo(
         email,
@@ -53,6 +52,46 @@ async def verify_email_photo_endpoint(
         video_content_type=live_photo.content_type,
         challenge_nonce=challenge_nonce,
     )
+
+
+def _video_too_large():
+    return {"verified": False, "is_match": False, "reason_code": "VIDEO_TOO_LARGE",
+            "reason": "Video is larger than 25 MB", "failed_checks": ["VIDEO_TOO_LARGE"]}
+
+
+@router.post("/register")
+async def register_endpoint(
+    email: str = Form(...),
+    examId: int = Form(...),
+    profile_photo: UploadFile = File(...),
+    video: UploadFile = File(...),
+    challenge_nonce: str = Form(...),           # from GET /verification/challenge
+):
+    """Registration always uses the active challenge. On success the response
+    holds `reference_embedding`: .NET stores it and sends it to /verify and
+    /exam/session/start."""
+    # an empty nonce must not fall back to the weaker movement check
+    if not challenge_nonce.strip():
+        return {"verified": False, "is_match": False, "reason_code": "CHALLENGE_MISSING",
+                "reason": REASONS["CHALLENGE_MISSING"], "failed_checks": ["CHALLENGE_MISSING"]}
+    return await verify_email_photo_endpoint(email, examId, profile_photo, video, challenge_nonce)
+
+
+@router.post("/verify")
+async def verify_endpoint(
+    email: str = Form(...),
+    examId: int = Form(...),
+    reference_embedding: str = Form(...),       # JSON saved from the /register response
+    video: UploadFile = File(...),
+    challenge_nonce: str | None = Form(None),   # with a nonce: active; without: passive
+):
+    video_bytes = await video.read()
+    if len(video_bytes) > MAX_VIDEO_BYTES:
+        return _video_too_large()
+    return await verify_identity(email, examId, reference_embedding, video_bytes,
+                                 video_filename=video.filename,
+                                 video_content_type=video.content_type,
+                                 challenge_nonce=challenge_nonce or None)
 
 
 @router.get("/verification/challenge")
@@ -66,9 +105,11 @@ async def challenge_endpoint():
 async def exam_start_endpoint(
     email: str = Form(...),
     examId: int = Form(...),
-    email_photo: UploadFile = File(...),
+    reference_embedding: str | None = Form(None),   # JSON saved from the registration response
+    email_photo: UploadFile | None = File(None),    # fallback for candidates registered earlier
 ):
-    return await start_exam(email, examId, await email_photo.read())
+    photo = await email_photo.read() if email_photo else None
+    return await start_exam(email, examId, photo, reference_embedding)
 
 
 @router.post("/exam/session/{session_id}/window")

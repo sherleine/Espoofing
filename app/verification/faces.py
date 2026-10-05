@@ -12,6 +12,10 @@ import numpy as np
 from insightface.app import FaceAnalysis
 from insightface.app.common import Face
 
+# Stored with every saved embedding: embeddings from different models
+# cannot be compared, so a model change must invalidate old ones.
+EMBEDDING_MODEL = "insightface/buffalo_l/w600k_r50"
+
 MIN_DET_SCORE = 0.50            # ignore weak detections
 MAX_SIDE = 960                  # downscale big frames for speed
 

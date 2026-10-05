@@ -37,11 +37,13 @@ MIN_DURATION_SEC = 1.5
 
 CHALLENGE_TARGET_FRAMES = 40    # denser sampling so short blinks are not missed
 CHALLENGE_EMBED_FRAMES = 16     # identity needs fewer frames than liveness
+MIN_FRONTAL_FRAMES = 3          # below this, use every frame for identity
 
 # Switch on once the frontend shows the challenge prompts.
 REQUIRE_CHALLENGE = os.getenv("VERIFICATION_REQUIRE_CHALLENGE", "0") == "1"
-# PAD HIGH_RISK fails registration; set to 0 to only report the PAD result.
-PAD_ENFORCE_REGISTRATION = os.getenv("PAD_ENFORCE_REGISTRATION", "1") == "1"
+# PAD HIGH_RISK fails registration and verification; set to 0 to only
+# report the PAD result.
+PAD_ENFORCE = os.getenv("PAD_ENFORCE_REGISTRATION", "1") == "1"
 
 EXAM_DET_SIZE = (480, 480)      # detection only, every exam frame
 EXAM_WINDOW_FRAMES = 8          # suggested frames per window ...
@@ -55,16 +57,21 @@ REASONS = {
     "NO_FACE_IN_PROFILE": "No face found in the profile photo",
     "VIDEO_UNREADABLE": "Video could not be decoded (unsupported format or corrupt file)",
     "VIDEO_TOO_SHORT": "Video is too short or has too few frames",
+    "VIDEO_IS_IMAGE": "The video field contains a single image: upload a video file (.mp4 / .webm)",
     "FACE_NOT_CONSISTENT": "Face was not visible in enough of the video",
     "MULTIPLE_FACES_IN_VIDEO": "More than one person appeared in the video",
     "DIFFERENT_PEOPLE_IN_VIDEO": "The face changed to a different person during the video",
     "NO_HEAD_MOVEMENT": "No head movement detected (turn your head left and right)",
     "NO_FACIAL_MOVEMENT": "No natural facial movement detected (blink or open your mouth)",
     "FACE_MISMATCH": "The person in the video does not match the profile photo",
+    "IDENTITY_MISMATCH": "The person in the video does not match the registered candidate",
     "CHALLENGE_MISSING": "A liveness challenge is required: request one first",
     "CHALLENGE_INVALID": "The liveness challenge is unknown, already used or expired",
     "CHALLENGE_FAILED": "The requested actions were not performed in the requested order",
     "SPOOF_SUSPECTED": "The video looks like a photo or screen held in front of the camera",
+    "NO_REFERENCE": "Send the reference_embedding saved at registration (or the profile photo)",
+    "INVALID_REFERENCE_EMBEDDING": "reference_embedding is not a valid saved embedding",
+    "REFERENCE_MODEL_MISMATCH": "reference_embedding was made with a different face model: register again",
 }
 
 
@@ -78,35 +85,34 @@ def _result(reason_code, failed_checks=None, **extra):
     }
 
 
-def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
-    # 1. Profile photo -------------------------------------------------------
-    img = cv2.imread(profile_photo_path)
-    if img is None:
-        return _result("PROFILE_UNREADABLE")
-    profile_faces = faces.analyze_frame(faces.resize(img), landmarks=False)
-    if not profile_faces:
-        return _result("NO_FACE_IN_PROFILE")
-    profile = face_verification.largest(profile_faces)
-
-    # 2. Challenge (single use: consumed even if verification fails) ---------
-    challenge = None
+def _take_challenge(challenge_nonce, required):
+    """Single use: the nonce is consumed even if verification then fails.
+    Returns (challenge or None, error_code or None)."""
     if challenge_nonce:
-        challenge, error = registration_liveness.consume_challenge(challenge_nonce)
-        if error:
-            return _result(error)
-    elif REQUIRE_CHALLENGE:
-        return _result("CHALLENGE_MISSING")
+        return registration_liveness.consume_challenge(challenge_nonce)
+    return None, "CHALLENGE_MISSING" if required else None
 
-    # 3. Video frames --------------------------------------------------------
+
+def _check_live_video(video_path, challenge):
+    """Steps shared by registration and verification: decode the video,
+    require one consistent face, embed the frontal frames, evaluate the
+    challenge (if any) and run PAD.
+
+    Returns (checks, None), or (None, error_result) when the video cannot be
+    used at all.
+    """
     frames, times, video_info = faces.read_video(
         video_path, CHALLENGE_TARGET_FRAMES if challenge else TARGET_FRAMES)
     if not frames:
-        return _result("VIDEO_UNREADABLE", video=video_info)
+        return None, _result("VIDEO_UNREADABLE", video=video_info)
+    # OpenCV opens a JPEG/PNG as a one-frame "video"; say so instead of
+    # reporting a confusing VIDEO_TOO_SHORT.
+    if video_info["total_frames"] == 1:
+        return None, _result("VIDEO_IS_IMAGE", video=video_info)
     dur = video_info.get("duration_sec")
     if len(frames) < MIN_FRAMES or (dur is not None and dur < MIN_DURATION_SEC):
-        return _result("VIDEO_TOO_SHORT", video={**video_info, "frames_sampled": len(frames)})
+        return None, _result("VIDEO_TOO_SHORT", video={**video_info, "frames_sampled": len(frames)})
 
-    # 4. Faces per frame, presence, face count -------------------------------
     faces_per_frame = [faces.analyze_frame(f, embedding=False) for f in frames]
     summary = face_tracking.summarize(faces_per_frame)
     video_info.update({
@@ -117,45 +123,74 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
     })
     presence_failure = face_tracking.check_presence(summary)
     if presence_failure:
-        return _result(presence_failure, video=video_info)
-
+        return None, _result(presence_failure, video=video_info)
     primary = summary["primary"]
-    video_faces = [f for f in primary if f is not None]
 
-    # 5. Embeddings + same person throughout ---------------------------------
+    # Side-profile faces give unreliable embeddings: without this, a candidate
+    # turning far to the side looks like a different person.
     with_face = [i for i, f in enumerate(primary) if f is not None]
-    if challenge and len(with_face) > CHALLENGE_EMBED_FRAMES:
-        pick = np.linspace(0, len(with_face) - 1, CHALLENGE_EMBED_FRAMES).astype(int)
-        with_face = [with_face[j] for j in pick]
-    emb = np.stack([faces.embed(frames[i], primary[i]) for i in with_face])
-    consistency = face_tracking.consistency(emb)
+    frontal = [i for i in with_face
+               if abs(faces.pose(primary[i])[1]) <= face_verification.MAX_IDENTITY_YAW_DEG]
+    identity_frames = frontal if len(frontal) >= MIN_FRONTAL_FRAMES else with_face
+    if challenge and len(identity_frames) > CHALLENGE_EMBED_FRAMES:
+        pick = np.linspace(0, len(identity_frames) - 1, CHALLENGE_EMBED_FRAMES).astype(int)
+        identity_frames = [identity_frames[j] for j in pick]
+    embeddings = np.stack([faces.embed(frames[i], primary[i]) for i in identity_frames])
+    consistency = face_tracking.consistency(embeddings)
     video_info["min_consistency"] = round(float(consistency.min()), 3)
 
-    # 6. Active liveness -----------------------------------------------------
-    liveness, movement_failed = registration_liveness.movement_check(video_faces)
     challenge_block = None
     if challenge:
         challenge_block = registration_liveness.evaluate_challenge(
             challenge, [registration_liveness.measure(f) for f in primary], times)
-        liveness_failed = [] if challenge_block["passed"] else ["CHALLENGE_FAILED"]
-    else:
-        liveness_failed = movement_failed
-
-    # 7. Passive PAD ---------------------------------------------------------
     pad = anti_spoof.detect_spoof(frames, primary)
 
-    # 8. Identity ------------------------------------------------------------
-    identity, matched = face_verification.compare(emb, profile)
-
-    # Collect every failed check, report the most important first.
+    # Most important failure first: it becomes the reason_code.
     failed = []
     if consistency.min() < face_tracking.SAME_PERSON_THRESHOLD:
         failed.append("DIFFERENT_PEOPLE_IN_VIDEO")
-    if PAD_ENFORCE_REGISTRATION and pad["status"] == "HIGH_RISK":
+    if PAD_ENFORCE and pad["status"] == "HIGH_RISK":
         failed.append("SPOOF_SUSPECTED")
-    failed += liveness_failed
+    if challenge_block and not challenge_block["passed"]:
+        failed.append("CHALLENGE_FAILED")
+    return {
+        "faces": [f for f in primary if f is not None],
+        "embeddings": embeddings,
+        "video": video_info,
+        "anti_spoof": pad,
+        "challenge": challenge_block,
+        "failed": failed,
+    }, None
+
+
+def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
+    """Registration: trusted profile photo + live video with active liveness.
+    On success the response carries `reference_embedding` for the caller to
+    store and send back for later verification and the exam."""
+    img = cv2.imread(profile_photo_path)
+    if img is None:
+        return _result("PROFILE_UNREADABLE")
+    profile_faces = faces.analyze_frame(faces.resize(img), landmarks=False)
+    if not profile_faces:
+        return _result("NO_FACE_IN_PROFILE")
+    profile = face_verification.largest(profile_faces)
+
+    challenge, error = _take_challenge(challenge_nonce, required=REQUIRE_CHALLENGE)
+    if error:
+        return _result(error)
+    checks, error_result = _check_live_video(video_path, challenge)
+    if error_result:
+        return error_result
+
+    # Without a challenge, fall back to the weaker "did anything move" check.
+    liveness, movement_failed = registration_liveness.movement_check(checks["faces"])
+    identity, matched = face_verification.compare(checks["embeddings"], profile.normed_embedding)
+    identity["profile_det_score"] = round(float(profile.det_score), 3)
+
+    failed = checks["failed"] + ([] if challenge else movement_failed)
     if not matched:
         failed.append("FACE_MISMATCH")
+    liveness_failed = {"NO_HEAD_MOVEMENT", "NO_FACIAL_MOVEMENT", "CHALLENGE_FAILED"} & set(failed)
 
     result = _result(
         failed[0] if failed else "OK",
@@ -165,11 +200,48 @@ def verify_registration(profile_photo_path, video_path, challenge_nonce=None):
         similarity=identity["similarity"],
         identity=identity,
         liveness=liveness,
-        video=video_info,
-        anti_spoof=pad,
+        video=checks["video"],
+        anti_spoof=checks["anti_spoof"],
     )
-    if challenge_block:
-        result["challenge"] = challenge_block
+    if checks["challenge"]:
+        result["challenge"] = checks["challenge"]
+    # The live embedding (same camera and lighting as later checks) is a
+    # better reference than the official photo.
+    if result["verified"]:
+        result["reference_embedding"] = face_verification.export_template(
+            face_verification.build_template(checks["embeddings"]))
+    return result
+
+
+def verify_identity(reference_embedding, video_path, challenge_nonce=None):
+    """Later verification against the embedding saved at registration.
+    With a challenge nonce: active liveness + identity + PAD. Without one:
+    passive - the candidate only looks at the camera (identity + PAD + one
+    consistent face)."""
+    reference, error = face_verification.import_template(reference_embedding)
+    if error:
+        return _result(error)
+    challenge, error = _take_challenge(challenge_nonce, required=False)
+    if error:
+        return _result(error)
+    checks, error_result = _check_live_video(video_path, challenge)
+    if error_result:
+        return error_result
+
+    identity, matched = face_verification.compare(checks["embeddings"], reference)
+    failed = checks["failed"] + ([] if matched else ["IDENTITY_MISMATCH"])
+    result = _result(
+        failed[0] if failed else "OK",
+        failed_checks=failed,
+        mode="challenge" if challenge else "passive",
+        identity_match=matched,
+        similarity=identity["similarity"],
+        identity=identity,
+        video=checks["video"],
+        anti_spoof=checks["anti_spoof"],
+    )
+    if checks["challenge"]:
+        result["challenge"] = checks["challenge"]
     return result
 
 
@@ -202,16 +274,27 @@ def _get_session(session_id):
         return _sessions.get(session_id)
 
 
-def start_exam_session(email, exam_id, profile_image):
-    """`profile_image`: BGR image of the trusted profile photo."""
-    if profile_image is None:
-        return {"started": False, "reason_code": "PROFILE_UNREADABLE",
-                "reason": REASONS["PROFILE_UNREADABLE"]}
-    profile_faces = faces.analyze_frame(faces.resize(profile_image), landmarks=False)
-    if not profile_faces:
-        return {"started": False, "reason_code": "NO_FACE_IN_PROFILE",
-                "reason": REASONS["NO_FACE_IN_PROFILE"]}
-    reference = face_verification.largest(profile_faces).normed_embedding
+def _not_started(reason_code):
+    return {"started": False, "reason_code": reason_code, "reason": REASONS[reason_code]}
+
+
+def start_exam_session(email, exam_id, profile_image=None, reference_embedding=None):
+    """Reference for the exam: the embedding saved at registration
+    (`reference_embedding`, as returned there), or - for candidates registered
+    before embeddings were saved - the profile photo (BGR image)."""
+    if reference_embedding is not None:
+        reference, error = face_verification.import_template(reference_embedding)
+        if error:
+            return _not_started(error)
+        source = "registration_embedding"
+    elif profile_image is not None:
+        profile_faces = faces.analyze_frame(faces.resize(profile_image), landmarks=False)
+        if not profile_faces:
+            return _not_started("NO_FACE_IN_PROFILE")
+        reference = face_verification.largest(profile_faces).normed_embedding
+        source = "profile_photo"
+    else:
+        return _not_started("NO_REFERENCE")
 
     session = ExamSession(
         session_id=secrets.token_urlsafe(16), email=email, exam_id=exam_id,
@@ -219,10 +302,12 @@ def start_exam_session(email, exam_id, profile_image):
     _get_session(None)  # purge expired sessions
     with _sessions_lock:
         _sessions[session.session_id] = session
-    log.info("Exam session started: session=%s exam=%s", session.session_id, exam_id)
+    log.info("Exam session started: session=%s exam=%s reference=%s",
+             session.session_id, exam_id, source)
     return {
         "started": True,
         "session_id": session.session_id,
+        "reference": source,
         "window_frames": EXAM_WINDOW_FRAMES,
         "frame_interval_ms": EXAM_FRAME_INTERVAL_MS,
         "next_window_sec": risk_engine.NEXT_WINDOW_SEC["NORMAL"],
@@ -240,6 +325,11 @@ def process_exam_window(session_id, frames):
     frames = [faces.resize(f) for f in frames if f is not None][:EXAM_MAX_FRAMES]
     if not frames:
         return {"ok": False, "reason_code": "NO_FRAMES", "reason": "No decodable frames in window"}
+    # PAD needs several frames; a single photo would silently skip it.
+    if len(frames) < anti_spoof.MIN_SCORED_FRAMES:
+        return {"ok": False, "reason_code": "TOO_FEW_FRAMES",
+                "reason": f"Received {len(frames)} frame(s): send at least "
+                          f"{anti_spoof.MIN_SCORED_FRAMES} frames or a 2-3 s video clip per window"}
 
     with session.lock:  # windows of one session are processed in order
         faces_per_frame = [faces.analyze_frame(f, landmarks=False, embedding=False, det_size=EXAM_DET_SIZE)

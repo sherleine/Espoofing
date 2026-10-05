@@ -30,32 +30,44 @@ def group_photo(sample_dir):
 
 
 @pytest.fixture(scope="session")
-def people(group_photo):
-    """Two single-person, near-frontal crops (A, B) from the group photo,
-    upscaled so the face is a realistic webcam size."""
+def group_faces(group_photo):
     from app.verification.faces import analyze_frame
-    faces = analyze_frame(group_photo, landmarks=True, embedding=False)
-    frontal = sorted(faces, key=lambda f: abs(float(f.pose[1])))[:2]
-    crops = []
-    h, w = group_photo.shape[:2]
-    for f in frontal:
-        # grey out everybody else so the crop holds exactly one face
-        img = group_photo.copy()
-        for other in faces:
-            if other is f:
-                continue
-            ox1, oy1, ox2, oy2 = other.bbox
-            pad = 0.25 * (ox2 - ox1)
-            img[int(max(oy1 - pad, 0)):int(min(oy2 + pad, h)),
-                int(max(ox1 - pad, 0)):int(min(ox2 + pad, w))] = 127
-        x1, y1, x2, y2 = f.bbox
-        cx, cy, s = (x1 + x2) / 2, (y1 + y2) / 2, max(x2 - x1, y2 - y1) * 1.6
-        a, b = int(max(cy - s, 0)), int(min(cy + s, h))
-        c, d = int(max(cx - s, 0)), int(min(cx + s, w))
-        crops.append(cv2.resize(img[a:b, c:d], (480, 480)))
-    for crop in crops:
-        assert len(analyze_frame(crop, landmarks=False, embedding=False)) == 1
-    return crops
+    return analyze_frame(group_photo, landmarks=True, embedding=False)
+
+
+def single_face_crop(photo, faces, face):
+    """Crop around `face`, everybody else greyed out, upscaled so the face
+    is a realistic webcam size."""
+    from app.verification.faces import analyze_frame
+    img = photo.copy()
+    h, w = img.shape[:2]
+    for other in faces:
+        if other is face:
+            continue
+        ox1, oy1, ox2, oy2 = other.bbox
+        pad = 0.25 * (ox2 - ox1)
+        img[int(max(oy1 - pad, 0)):int(min(oy2 + pad, h)),
+            int(max(ox1 - pad, 0)):int(min(ox2 + pad, w))] = 127
+    x1, y1, x2, y2 = face.bbox
+    cx, cy, s = (x1 + x2) / 2, (y1 + y2) / 2, max(x2 - x1, y2 - y1) * 1.6
+    crop = cv2.resize(img[int(max(cy - s, 0)):int(min(cy + s, h)),
+                          int(max(cx - s, 0)):int(min(cx + s, w))], (480, 480))
+    assert len(analyze_frame(crop, landmarks=False, embedding=False)) == 1
+    return crop
+
+
+@pytest.fixture(scope="session")
+def people(group_photo, group_faces):
+    """Two near-frontal single-person crops (A, B)."""
+    frontal = sorted(group_faces, key=lambda f: abs(float(f.pose[1])))[:2]
+    return [single_face_crop(group_photo, group_faces, f) for f in frontal]
+
+
+@pytest.fixture(scope="session")
+def side_profile(group_photo, group_faces):
+    """Crop of the most strongly turned face in the group photo."""
+    turned = max(group_faces, key=lambda f: abs(float(f.pose[1])))
+    return single_face_crop(group_photo, group_faces, turned)
 
 
 def jitter_frames(img, n, seed=0, shift=6.0, angle=2.0):

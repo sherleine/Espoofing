@@ -1,4 +1,5 @@
 # app/verification/view.py
+import json
 import logging
 import os
 import re
@@ -104,11 +105,62 @@ async def verify_email_photo(
     }
 
 
-async def start_exam(email: str, examId: int, profile_photo_bytes: bytes):
+def _failure(reason_code):
+    return {"verified": False, "reason_code": reason_code,
+            "reason": main.REASONS[reason_code], "failed_checks": [reason_code]}
+
+
+async def verify_identity(
+    email: str,
+    examId: int,
+    reference_embedding_json: str,
+    video_bytes: bytes,
+    video_filename: str | None = None,
+    video_content_type: str | None = None,
+    challenge_nonce: str | None = None,
+):
+    """Verification against the embedding .NET saved from /register."""
+    if not video_bytes:
+        return _failure("VIDEO_UNREADABLE")
+    try:
+        reference = json.loads(reference_embedding_json)
+    except json.JSONDecodeError:
+        return _failure("INVALID_REFERENCE_EMBEDDING")
+
+    stamp = int(time.time() * 1000)
+    video_path = os.path.join(
+        UPLOAD_DIR, f"{_safe(email)}_{examId}_{stamp}_verify{_video_ext(video_filename, video_content_type)}")
+    _write(video_path, video_bytes)
+
+    started = time.perf_counter()
+    try:
+        result = await run_in_threadpool(main.verify_identity, reference, video_path, challenge_nonce)
+    finally:
+        _remove(video_path)
+
+    pad = result.get("anti_spoof") or {}
+    log.info("Identity verified: exam=%s mode=%s code=%s similarity=%s pad=%s spoof_score=%s ms=%d",
+             examId, result.get("mode"), result["reason_code"], result.get("similarity"),
+             pad.get("status"), pad.get("spoof_score"), (time.perf_counter() - started) * 1000)
+
+    if result["verified"]:
+        mark_verified(email)
+    return result
+
+
+async def start_exam(email: str, examId: int, profile_photo_bytes: bytes | None = None,
+                     reference_embedding_json: str | None = None):
+    reference = None
+    if reference_embedding_json:
+        try:
+            reference = json.loads(reference_embedding_json)
+        except json.JSONDecodeError:
+            return {"started": False, "reason_code": "INVALID_REFERENCE_EMBEDDING",
+                    "reason": main.REASONS["INVALID_REFERENCE_EMBEDDING"]}
     img = None
     if profile_photo_bytes:
         img = cv2.imdecode(np.frombuffer(profile_photo_bytes, np.uint8), cv2.IMREAD_COLOR)
-    return await run_in_threadpool(main.start_exam_session, email, examId, img)
+    return await run_in_threadpool(main.start_exam_session, email, examId, img, reference)
 
 
 def _clip_frames(clip_bytes: bytes, filename: str | None, content_type: str | None):

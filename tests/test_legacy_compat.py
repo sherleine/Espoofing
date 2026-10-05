@@ -9,7 +9,7 @@ import pytest
 
 from conftest import models
 
-NEW_KEYS = {"anti_spoof", "challenge"}
+NEW_KEYS = {"anti_spoof", "challenge", "reference_embedding"}
 CASES = [
     ("profile_a", "video_a"),          # same person, no head/face movement
     ("profile_b", "video_a"),          # different person
@@ -36,7 +36,7 @@ def legacy():
 @pytest.mark.parametrize("profile,video", CASES)
 def test_same_result_as_original(legacy, media, monkeypatch, profile, video):
     from app.verification import main, service
-    monkeypatch.setattr(main, "PAD_ENFORCE_REGISTRATION", False)
+    monkeypatch.setattr(main, "PAD_ENFORCE", False)
     profile_path = media.get(profile, profile)
     old = legacy.verify_faces(profile_path, media[video])
     new = service.verify_faces(profile_path, media[video])

@@ -20,8 +20,8 @@ Refactor and extension of the existing `app/verification` module (router → vie
 
 ```bash
 pip install -r requirements.txt          # Python 3.10+; CPU only is fine
-python -m pytest -q                      # 54 tests, ~9 min on CPU (models download on first run)
-uvicorn server:app --port 8000           # standalone API (see section 3)
+python -m pytest -q                      # 69 tests, ~10-15 min on CPU (models download on first run)
+python -m uvicorn server:app --port 8000 # standalone API (see section 3), docs at /docs
 python tools/webcam_demo.py pad          # live anti-spoofing score on your webcam
 ```
 
@@ -82,7 +82,57 @@ The .NET backend supplies the **trusted profile photo** from its own records, so
 Set `VERIFICATION_SERVICE_KEY` on the Python service and send it as the `X-Service-Key` header on every call.
 Without the variable, the endpoints are open (development only; a warning is logged). Keep the service off the public internet too.
 
-### 3.1 Registration — `POST /verify-email-photo` (existing, unchanged fields)
+### Flow
+
+```text
+1. GET  /verification/challenge   -> nonce + steps; the frontend shows the prompts while recording
+2. POST /register                 profile photo + challenge video + nonce
+                                  -> verified + reference_embedding          (.NET stores it)
+3. POST /verify                   reference_embedding + short video (+ optional nonce)
+                                  -> verified: is this still the registered person?
+4. POST /exam/session/start       reference_embedding -> session_id, then exam windows (3.5)
+```
+
+The reference embedding comes from the **live registration video**, not the official photo: same camera and similar
+lighting as later checks, so matches are more reliable, and later checks compare against the face that passed liveness
+and anti-spoofing.
+
+### 3.1 Register — `POST /register`
+
+| Form field | |
+|---|---|
+| `email`, `examId` | candidate and exam |
+| `profile_photo` | trusted profile photo (**from the .NET database, never from the browser**) |
+| `video` | the challenge video |
+| `challenge_nonce` | **required**, from `GET /verification/challenge` |
+
+Same checks and response as `/verify-email-photo` below, but the challenge is mandatory: a missing or empty nonce gives
+`CHALLENGE_MISSING` instead of falling back to the weak movement check. When `verified` is true the response also holds:
+
+```json
+"reference_embedding": {"model": "insightface/buffalo_l/w600k_r50", "vector": [0.0123, -0.0456, "… 512 numbers"]}
+```
+
+**.NET stores this object as-is** (e.g. a JSON column next to the candidate and exam) and sends it back unchanged as
+the `reference_embedding` form field. It is biometric data: protect and delete it like the photo. The `model` name
+matters: if the face model is ever replaced, old embeddings are rejected with `REFERENCE_MODEL_MISMATCH` and the
+candidate registers again.
+
+### 3.2 Verify — `POST /verify`
+
+| Form field | |
+|---|---|
+| `email`, `examId` | candidate and exam |
+| `reference_embedding` | the JSON object saved from `/register`, as text |
+| `video` | short video of the candidate (a few seconds) |
+| `challenge_nonce` | *optional*: with a nonce the candidate performs the actions (**challenge** mode); without, they only look at the camera (**passive** mode) |
+
+Both modes check: exactly one consistent face, identity against the saved embedding, and passive PAD. Challenge mode also
+checks the requested actions. Response: `verified`, `reason_code`, `reason`, `failed_checks`, `mode`
+(`passive` / `challenge`), `identity_match`, `similarity`, `identity`, `video`, `anti_spoof`, and `challenge` when a
+nonce was sent. A different person gives `IDENTITY_MISMATCH`.
+
+### 3.3 Legacy registration — `POST /verify-email-photo` (existing, unchanged fields)
 
 | Form field | |
 |---|---|
@@ -97,6 +147,7 @@ The response keeps every existing key (`verified`, `is_match`, `reason_code`, `r
 * `anti_spoof` — passive PAD result: `status`, `spoof_score`, `frames_scored`, `frames_skipped`, `frame_scores`.
   There is no `confidence`: the scores are not calibrated yet, so a confidence number would claim more than we know.
 * `challenge` — only when a nonce was sent: steps, `passed`, `failure`, matched/detected actions with times
+* `reference_embedding` — only when `verified` is true (see 3.1)
 
 New `reason_code` values (the frontend should show `reason` for unknown codes):
 
@@ -106,12 +157,17 @@ New `reason_code` values (the frontend should show `reason` for unknown codes):
 | `CHALLENGE_INVALID` | nonce unknown, expired (3 min) or already used — nonces are single use |
 | `CHALLENGE_MISSING` | no nonce while `VERIFICATION_REQUIRE_CHALLENGE=1` |
 | `SPOOF_SUSPECTED` | PAD status `HIGH_RISK` (switch off with `PAD_ENFORCE_REGISTRATION=0`) |
+| `IDENTITY_MISMATCH` | `/verify`: the video does not match the saved embedding |
+| `INVALID_REFERENCE_EMBEDDING` | `reference_embedding` is not valid JSON / not 512 numbers |
+| `REFERENCE_MODEL_MISMATCH` | `reference_embedding` was made with a different face model |
+| `NO_REFERENCE` | exam start without `reference_embedding` or photo |
+| `VIDEO_IS_IMAGE` | a photo was uploaded in the video field |
 
 Without a nonce the old "did the head/face move at all" check runs, with the same results as before
 (verified by `tests/test_legacy_compat.py` against a frozen copy of the original `service.py`).
 That check is **weak**: any recording of the candidate passes. Turn on `VERIFICATION_REQUIRE_CHALLENGE=1` once the frontend shows prompts.
 
-### 3.2 Challenge — `GET /verification/challenge`
+### 3.4 Challenge — `GET /verification/challenge`
 
 ```json
 {
@@ -129,22 +185,30 @@ That check is **weak**: any recording of the candidate passes. Turn on `VERIFICA
 Frontend: show each prompt for `step_seconds` while recording (≈ 8 s in total), then upload the video with the `nonce`.
 The steps are 3 distinct actions out of {turn_left, turn_right, blink, open_mouth}, in random order, and there is always at least one head turn.
 
+**Head turns don't need a precise angle.** A gentle turn of about 10° counts in the challenge, and 5° in the simple
+check; a still photo moves the angle estimate by less than 1°. Turning far to the side is fine too: frames turned more
+than 35° are left out of the identity and same-person checks, because face recognition is unreliable on side profiles.
+
 **Left/right:** "left" means the candidate's own left. This assumes the recorded video is **not mirrored**,
 which is what `MediaRecorder` produces even when the on-screen preview is mirrored with CSS. If your client records a mirrored stream,
 set `VERIFICATION_MIRRORED_INPUT=1`. The webcam demo shows the live yaw so you can check this.
 
-### 3.3 Exam monitoring (passive)
+### 3.5 Exam monitoring (passive)
 
 ```text
-POST /exam/session/start             email, examId, email_photo   -> session_id + capture hints
+POST /exam/session/start             email, examId, reference_embedding -> session_id + capture hints
+                                     (email_photo instead: fallback for candidates registered earlier)
 POST /exam/session/{id}/window       frames=<jpg> (repeat, in order)  OR  clip=<short video>
 GET  /exam/session/{id}              state, highest state, event log
 POST /exam/session/{id}/end          final summary, frees the session
 ```
 
+A window needs at least 3 frames (or a clip): fewer gives `TOO_FEW_FRAMES`, because anti-spoofing
+needs several frames.
 Suggested client cadence (returned by `start`, all configurable): **8 frames at ~250 ms intervals (a 2 s window)**.
 After each window, wait `next_window_sec` from the response before sending the next one. It is about 30 s when NORMAL and
 about 10 s when SUSPICIOUS, with ±30 % random jitter so the schedule can't be predicted.
+The start response says which reference is used: `"reference": "registration_embedding"` or `"profile_photo"`.
 
 Window response (shortened):
 
@@ -185,7 +249,7 @@ or move `_sessions` and the challenge store to Redis (both are small dicts, mark
 | Deepfake / face swap | almost always **injection** (virtual camera) | identity checks partly; **not covered yet** | needs stream integrity + deepfake detection (planned) |
 | Virtual camera / injected stream | injection | **not covered yet** | PAD cannot see it: the frames were never re-captured. A digitally generated video of a photo scores *genuine* (spoof ≈ 0.01) |
 | Second person in view | proctoring | face count, persistence rule; small background faces (<4 % area) ignored | a person outside the camera view |
-| Someone else takes over mid-exam | proctoring | identity vs reference every window; continuity vs previous window; forced check when a face returns after absence | twins / very similar faces; very poor lighting |
+| Someone else takes over mid-exam | proctoring | identity vs reference every window; continuity vs previous window; `face_returned` flag after absence | twins / very similar faces; very poor lighting |
 
 **PAD vs injection:** passive PAD analyses a *physical scene* filmed by a camera. Injection attacks (OBS Virtual Camera,
 real-time face-swap apps) replace the camera feed itself, so PAD has nothing to detect. Stream-integrity checks are a separate workstream
@@ -206,6 +270,9 @@ python -m pytest -q
 * `test_risk_engine.py`: one weak signal → only SUSPICIOUS; persistence → HIGH_RISK; relaxing back to NORMAL.
 * `test_anti_spoof.py`: status from the median spoof score, quality-skipped frames are counted but never scored as attacks,
   too few usable frames → INSUFFICIENT_QUALITY, and scores identical to InsightFace's own liveness wrapper.
+* `test_register_verify.py`: /register needs a challenge, a verified registration returns the embedding, passive and
+  challenge /verify against it, wrong person, broken or wrong-model embeddings, exam start with the embedding.
+* `test_registration_flow.py`: side-profile frames are not reported as a different person.
 * `test_exam_flow.py`, `test_api.py`: end to end through the HTTP API, auth, upload deletion.
 
 Synthetic videos are generated from InsightFace's sample photos, so the tests need no personal data. They prove the **logic**, not
@@ -294,6 +361,8 @@ which matters if you fine-tune on them.
 
 * Logs contain no email, images or embeddings: registrations are logged by exam ID, exam windows by session ID,
   and only windows that change or raise the risk state are logged.
+* The registration response returns the candidate's face embedding (512 numbers) for .NET to store. Treat it as
+  biometric data: encrypt at rest, restrict access, and delete it with the candidate's other data.
 * Uploaded photos and videos are now **deleted after verification**. They used to be kept forever in `uploads/verification/`.
 * Exam frames sent as images are processed in memory. A window sent as a video clip is written to a temporary file
   for decoding and deleted straight away. Sessions keep only one reference embedding, the risk history and an event log.

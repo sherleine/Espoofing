@@ -18,8 +18,10 @@ import numpy as np
 from app.verification.faces import pose
 
 # Movement check (no challenge)
-MIN_YAW_RANGE_DEG = 10.0        # head turn left/right
-MIN_PITCH_RANGE_DEG = 8.0       # or nod up/down
+# A still photo moves the pose estimate by less than 1 degree, so small,
+# natural turns are enough; candidates cannot judge angles.
+MIN_YAW_RANGE_DEG = 5.0         # head turn left/right
+MIN_PITCH_RANGE_DEG = 4.0       # or nod up/down
 REQUIRE_FACIAL_MOVEMENT = True
 MIN_EAR_CHANGE = 0.25           # relative eye-opening change (blink)
 MIN_MAR_CHANGE = 0.35           # relative mouth-opening change
@@ -36,7 +38,7 @@ CHALLENGE_STEPS = 3             # 3 distinct actions out of 4 -> always >= 1 hea
 CHALLENGE_TTL_SEC = 180         # nonce must be used within this time
 STEP_SECONDS = 2.5              # suggested time per prompt in the UI
 
-TURN_DEG = 15.0                 # yaw change from the clip's median to count as a turn
+TURN_DEG = 10.0                 # yaw change from the clip's median to count as a turn
 BLINK_EAR_DROP = 0.30           # eye aspect ratio drops 30% below the clip's median
 MOUTH_OPEN_DELTA = 0.25         # mouth aspect ratio rises this much above the median
 MAX_YAW_FOR_EYES_MOUTH = 20.0   # eye/mouth ratios are unreliable on turned faces

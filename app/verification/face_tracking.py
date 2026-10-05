@@ -5,9 +5,8 @@ video (summarize, check_presence, consistency) and across exam windows
 (ExamTracker).
 """
 
-import numpy as np
-
-from app.verification.face_verification import SIMILARITY_THRESHOLD, largest, similarity
+from app.verification.face_verification import (
+    SIMILARITY_THRESHOLD, build_template, largest, similarity)
 
 SAME_PERSON_THRESHOLD = 0.50    # every video face vs the video's mean face
 MIN_FACE_FRAME_RATIO = 0.6      # face must be visible in 60% of frames
@@ -63,9 +62,7 @@ def check_presence(summary):
 
 def consistency(embeddings):
     """Similarity of every embedding to the mean embedding (same person check)."""
-    mean_emb = embeddings.mean(axis=0)
-    mean_emb /= np.linalg.norm(mean_emb)
-    return embeddings @ mean_emb
+    return embeddings @ build_template(embeddings)
 
 
 def _area(face):

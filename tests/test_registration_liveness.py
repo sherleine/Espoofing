@@ -1,6 +1,25 @@
 import time
+from types import SimpleNamespace
+
+import numpy as np
 
 from app.verification import registration_liveness as rl
+
+
+def posed(yaws, pitch=0.0):
+    """Faces with only a head pose (no landmarks), for the movement check."""
+    return [SimpleNamespace(pose=np.array([pitch, y, 0.0]), landmark_3d_68=None) for y in yaws]
+
+
+def test_gentle_head_turn_counts_as_movement():
+    live, failed = rl.movement_check(posed([0, 2, 4, 6, 3, 0, -1]))
+    assert live["head_movement"] and "NO_HEAD_MOVEMENT" not in failed
+
+
+def test_still_face_jitter_is_not_movement():
+    # a still photo moves the pose estimate by less than 1 degree
+    live, failed = rl.movement_check(posed([0.0, 0.4, -0.3, 0.2, 0.5, -0.4]))
+    assert not live["head_movement"] and "NO_HEAD_MOVEMENT" in failed
 
 
 def frames(*segments):
@@ -27,6 +46,12 @@ def test_requested_sequence_passes():
     r = rl.evaluate_challenge(challenge("turn_left", "blink", "turn_right"), m)
     assert r["passed"], r
     assert [x["action"] for x in r["matched"]] == ["turn_left", "blink", "turn_right"]
+
+
+def test_gentle_challenge_turn_passes():
+    gentle_left = (3, 12.0, 0.30, 0.05)
+    m = frames(NEUTRAL, gentle_left, NEUTRAL, BLINK, NEUTRAL)
+    assert rl.evaluate_challenge(challenge("turn_left", "blink"), m)["passed"]
 
 
 def test_wrong_order_fails():
