@@ -35,8 +35,15 @@ async def verify_email_photo_endpoint(
     examId: int = Form(...),
     email_photo: UploadFile = File(...),
     live_photo: UploadFile = File(...),   # this is the selfie VIDEO (name kept for the frontend)
-    challenge_nonce: str | None = Form(None),   # from GET /verification/challenge
+    challenge_nonce: str | None = Form(None),
 ):
+    """Run the complete registration verification in one API call.
+
+    The normal integration does not need to request a challenge first. The
+    uploaded video is checked for identity, natural facial movement and PAD
+    in the same request. A challenge nonce remains optional for clients that
+    want the stronger prompted liveness flow.
+    """
     profile_bytes = await email_photo.read()
     video_bytes = await live_photo.read()
 
@@ -57,7 +64,7 @@ async def verify_email_photo_endpoint(
 
 @router.get("/verification/challenge")
 async def challenge_endpoint():
-    """Random ordered actions + single-use nonce for registration liveness."""
+    """Optional stronger liveness challenge; not required for registration."""
     return issue_challenge()
 
 
