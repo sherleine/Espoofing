@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, Uploa
 
 from app.verification.main import EXAM_MAX_FRAMES, end_exam_session, get_exam_status
 from app.verification.registration_liveness import issue_challenge
-from app.verification.view import exam_window, start_exam, verify_email_photo, verify_pad
+from app.verification.view import exam_window, start_exam, verify_email_photo
 
 SERVICE_KEY = os.getenv("VERIFICATION_SERVICE_KEY", "")
 if not SERVICE_KEY:
@@ -34,7 +34,7 @@ async def verify_email_photo_endpoint(
     live_photo: UploadFile = File(...),
     challenge_nonce: str | None = Form(None),
 ):
-    """Registration call: identity and liveness only."""
+    """Run the complete registration verification in one API call."""
     profile_bytes = await email_photo.read()
     video_bytes = await live_photo.read()
 
@@ -53,27 +53,9 @@ async def verify_email_photo_endpoint(
     )
 
 
-@router.post("/verify-pad")
-async def verify_pad_endpoint(
-    email: str = Form(...),
-    live_photo: UploadFile = File(...),
-):
-    """Second and final registration call: passive presentation-attack detection."""
-    video_bytes = await live_photo.read()
-    if len(video_bytes) > MAX_VIDEO_BYTES:
-        return {"ok": False, "reason_code": "VIDEO_TOO_LARGE",
-                "reason": "Video is larger than 25 MB"}
-
-    return await verify_pad(
-        email,
-        video_bytes,
-        video_filename=live_photo.filename,
-        video_content_type=live_photo.content_type,
-    )
-
-
 @router.get("/verification/challenge")
 async def challenge_endpoint():
+    """Legacy challenge endpoint; registration does not require a second API call."""
     return issue_challenge()
 
 
