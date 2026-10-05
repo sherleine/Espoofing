@@ -1,12 +1,22 @@
-"""Kept so existing callers of verify_faces/extract_frames keep working."""
+"""Compatibility entry points for the existing verification integration."""
 
 from app.verification.faces import read_video
-from app.verification.main import REASONS, TARGET_FRAMES, verify_registration
+from app.verification.main import TARGET_FRAMES, verify_registration
 
 
 def verify_faces(profile_photo_path, video_path, challenge_nonce=None, include_pad=True):
-    """Keep the existing verification entry point; PAD can be split into its own call."""
-    return verify_registration(profile_photo_path, video_path, challenge_nonce, include_pad=include_pad)
+    """Run the complete registration verification, including PAD.
+
+    `include_pad` remains in the signature for compatibility with existing
+    callers. Registration now always includes PAD so the public API needs
+    only one verification call.
+    """
+    return verify_registration(
+        profile_photo_path,
+        video_path,
+        challenge_nonce,
+        include_pad=True,
+    )
 
 
 def extract_frames(video_path, target=TARGET_FRAMES):
