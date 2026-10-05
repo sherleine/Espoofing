@@ -1,109 +1,129 @@
-# ESpoofing
+# Face Verification & Anti-Spoofing
 
-Face verification and presentation-attack detection service for remote exam registration and passive exam monitoring.
+Prototype verification service for remote exam registration and passive exam monitoring.
 
-## Authentication
+## Integration rule
 
-The .NET backend supplies the **trusted profile photo** from its own records, so only the .NET backend may call this service.
-Set `VERIFICATION_SERVICE_KEY` on the Python service and send it as the `X-Service-Key` header on every call.
-Without the variable, the endpoints are open (development only; a warning is logged). Keep the service off the public internet too.
-
-## 3.1 Registration — `POST /verify-email-photo` (existing, unchanged fields)
-
-Registration is designed as **one API call**. The integrating application sends the candidate details, trusted profile photo and live registration video to `/verify-email-photo`. The service performs the registration checks internally and returns one result.
-
-| Form field | |
-|---|---|
-| `email`, `examId` | as before |
-| `email_photo` | trusted profile photo (**from the .NET database, never from the browser**) |
-| `live_photo` | the selfie **video** (name kept for compatibility) |
-| `challenge_nonce` | optional — only needed when the client chooses the prompted challenge flow |
-
-The normal one-call flow does **not** require a preliminary challenge request. Without a nonce, the uploaded video is checked for face presence/consistency, natural facial movement, identity match and passive presentation-attack detection in the same request.
-
-The response keeps every existing key (`verified`, `is_match`, `reason_code`, `reason`, `failed_checks`, `live`,
-`identity_match`, `similarity`, `identity`, `liveness`, `video`) and adds:
-
-* `anti_spoof` — passive PAD result: `status`, `spoof_score`, `frames_scored`, `frames_skipped`, `frame_scores`.
-  There is no `confidence`: the scores are not calibrated yet, so a confidence number would claim more than we know.
-* `challenge` — only when a nonce was sent: steps, `passed`, `failure`, matched/detected actions with times
-
-New `reason_code` values (the frontend should show `reason` for unknown codes):
-
-| Code | When |
-|---|---|
-| `CHALLENGE_FAILED` | requested actions not seen, wrong order, or unrequested head turns |
-| `CHALLENGE_INVALID` | nonce unknown, expired (3 min) or already used — nonces are single use |
-| `CHALLENGE_MISSING` | no nonce while `VERIFICATION_REQUIRE_CHALLENGE=1` |
-| `SPOOF_SUSPECTED` | PAD status `HIGH_RISK` (switch off with `PAD_ENFORCE_REGISTRATION=0`) |
-
-Without a nonce the service uses the existing natural movement check. This keeps registration to one API call while still providing a liveness signal and PAD result. This movement check is weaker than a prompted challenge because a replay video can contain natural movement.
-
-### 3.2 Optional prompted liveness — `GET /verification/challenge`
-
-The challenge endpoint is retained for compatibility and for clients that want a stronger active-liveness flow. It is **not required** for the normal registration integration.
-
-```json
-{
-  "nonce": "Q2x4…",
-  "steps": ["turn_left", "blink", "turn_right"],
-  "prompts": ["Turn your head to your left, then back to the centre",
-              "Close your eyes for a moment, then open them",
-              "Turn your head to your right, then back to the centre"],
-  "step_seconds": 2.5,
-  "issued_at": 1790000000.0,
-  "expires_at": 1790000180.0
-}
-```
-
-If the client uses this optional flow, it requests the challenge first, shows each prompt while recording, then uploads the video with the returned `nonce` to the same `/verify-email-photo` endpoint.
-
-**Left/right:** "left" means the candidate's own left. This assumes the recorded video is **not mirrored**,
-which is what `MediaRecorder` produces even when the on-screen preview is mirrored with CSS. If your client records a mirrored stream,
-set `VERIFICATION_MIRRORED_INPUT=1`. The webcam demo shows the live yaw so you can check this.
-
-### 3.3 Exam monitoring (passive)
+The existing API routes are kept unchanged. Registration is designed so the integrating application can complete the normal verification flow with **one API call**:
 
 ```text
-POST /exam/session/start             email, examId, email_photo   -> session_id + capture hints
-POST /exam/session/{id}/window       frames=<jpg> (repeat, in order)  OR  clip=<short video>
-GET  /exam/session/{id}              state, highest state, event log
-POST /exam/session/{id}/end          final summary, frees the session
+POST /verify-email-photo
 ```
 
-Suggested client cadence (returned by `start`, all configurable): **8 frames at ~250 ms intervals (a 2 s window)**.
-After each window, wait `next_window_sec` from the response before sending the next one. It is about 30 s when NORMAL and
-about 10 s when SUSPICIOUS, with ±30 % random jitter so the schedule can't be predicted.
+The request contains:
 
-Window response (shortened):
+- `email`
+- `examId`
+- `email_photo` — trusted profile photo from the backend/database
+- `live_photo` — registration selfie video (field name kept for compatibility)
+- `challenge_nonce` — optional
 
-```json
-{
-  "ok": true, "window": 12,
-  "state": "SUSPICIOUS", "state_changed": true,
-  "reasons": ["SPOOF_SUSPECTED"],
-  "reason_text": ["Frames look like a photo/screen presented to the camera"],
-  "recommended_action": "INCREASE_MONITORING",
-  "next_window_sec": 9.4,
-  "signals": {
-    "face_count": "ONE", "identity": "MATCH", "continuity": "STABLE",
-    "reference_similarity": 0.71, "previous_similarity": 0.83,
-    "face_returned": false, "absent_windows": 0,
-    "pad": {"status": "ELEVATED", "spoof_score": 0.27, "frames_scored": 8, "frames_skipped": {}}
-  },
-  "faces": {"frames_sampled": 8, "frames_with_face": 8, "face_ratio": 1.0, "multi_face_ratio": 0.0},
-  "processing_ms": 1180
-}
+The service performs the verification internally and returns one result.
+
+## Registration flow
+
+```text
+POST /verify-email-photo
+        |
+        v
+Read profile photo + live video
+        |
+        v
+Reference face detection
+        |
+        v
+Registration video frame extraction
+        |
+        +--------------------+
+        |                    |
+        v                    v
+Identity matching       Liveness check
+        |                    |
+        +---------+----------+
+                  |
+                  v
+            Passive PAD
+                  |
+                  v
+          Final verification
+                  |
+                  v
+             One response
 ```
 
-`recommended_action`: `CONTINUE` → `INCREASE_MONITORING` → `FLAG_FOR_REVIEW`. What happens next (proctor alert, re-verification
-with the registration flow, review after the exam) is **exam policy, decided by the platform**, not by this service.
+The normal one-call flow does **not** require a preliminary challenge request. Without a nonce, the service uses the existing natural facial-movement check together with identity verification and passive presentation-attack detection.
 
-Sessions live in memory in a single process. With several uvicorn/gunicorn workers, either route each session to one worker
-or move `_sessions` and the challenge store to Redis (both are small dicts, marked in the code).
+The optional challenge endpoint is retained for clients that want prompted active liveness:
 
----
+```text
+GET /verification/challenge
+```
 
-## 4. What each layer protects against
+If a client uses the challenge, it sends the returned `nonce` with the same `/verify-email-photo` request. The route is not required for the normal one-call integration.
 
-| Attack | Type | Main defence here | Limitations |
+## Existing routes
+
+Do not change these routes when integrating the service:
+
+```text
+POST /verify-email-photo
+GET  /verification/challenge
+POST /exam/session/start
+POST /exam/session/{session_id}/window
+GET  /exam/session/{session_id}
+POST /exam/session/{session_id}/end
+```
+
+Exam monitoring is intentionally different from registration. It operates on short webcam windows during the exam, so multiple window requests are expected.
+
+## Internal modules
+
+```text
+app/verification/
+├── router.py                 HTTP routes only
+├── view.py                   request/file handling
+├── service.py                compatibility functions for existing callers
+├── main.py                   verification and exam orchestration
+├── faces.py                  image/video decoding and face/model operations
+├── face_verification.py      identity comparison
+├── registration_liveness.py  registration liveness/challenge logic
+├── anti_spoof.py             passive presentation-attack detection
+├── face_tracking.py          face presence and identity continuity
+└── risk_engine.py            exam risk assessment
+```
+
+The important design rule is **one external API call, multiple small internal functions**. The individual checks remain separate so they can be tested and maintained independently, while the existing API remains easy to integrate.
+
+## Identity vs liveness vs PAD
+
+These checks answer different questions:
+
+- **Identity:** does the face match the registered profile?
+- **Registration liveness:** does the video contain natural/live facial movement, or optionally the requested challenge actions?
+- **PAD:** does the camera input look like a physical photo/screen presentation attack?
+- **Exam tracking:** does the candidate remain present and consistent across exam windows?
+- **Risk engine:** what does the combination of recent exam signals indicate?
+
+A face match by itself is not sufficient. For example, a photo of the correct candidate may match the profile but should still be rejected when PAD identifies it as a presentation attack.
+
+## Important limitation
+
+Passive PAD does not provide stream integrity. If an attacker replaces the webcam feed using a virtual camera, real-time face swap, or another injection technique, the PAD model may never see the physical presentation attack. Deepfake and virtual-camera injection detection are separate future work.
+
+No part of this prototype should be described as providing 100% spoofing protection.
+
+## Running locally
+
+```bash
+pip install -r requirements.txt
+python -m pytest -q
+uvicorn server:app --port 8000
+```
+
+The models are loaded at application startup. The service currently keeps exam sessions and challenge state in process memory, so production deployments using multiple workers need a shared store such as Redis or worker/session affinity.
+
+## Compatibility
+
+Existing function entry points are intentionally preserved where the surrounding application may already depend on them. In particular, `service.verify_faces()` remains available as a compatibility wrapper around the registration verification flow.
+
+The refactor should change implementation details only; existing API routes, request fields and consumed response fields should remain compatible with the integrating application.
