@@ -25,7 +25,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import os
 import statistics
 import threading
 import time
@@ -58,6 +57,7 @@ class ResourceSampler:
         self.thread = threading.Thread(target=self._run, daemon=True)
         self.gpu_ready = False
         self.gpu_handles = []
+        self.before = None
 
         if pynvml is not None:
             try:
@@ -69,6 +69,7 @@ class ResourceSampler:
                 self.gpu_ready = bool(self.gpu_handles)
             except Exception:
                 self.gpu_ready = False
+        self.before = self._snapshot()
 
     def _processes(self):
         if psutil is None or self.pid is None:
@@ -81,6 +82,42 @@ class ResourceSampler:
             return [p for p in processes if p.is_running()]
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             return []
+
+    def _snapshot(self):
+        ram_mb = None
+        if psutil is not None and self.pid is not None:
+            current = self._processes()
+            if current:
+                rss = 0
+                for p in current:
+                    try:
+                        rss += p.memory_info().rss
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        continue
+                ram_mb = rss / (1024 * 1024)
+
+        gpu_util = None
+        gpu_mem_mb = None
+        if self.gpu_ready:
+            utils = []
+            mem_values = []
+            for handle in self.gpu_handles:
+                try:
+                    utils.append(pynvml.nvmlDeviceGetUtilizationRates(handle).gpu)
+                    mem_values.append(
+                        pynvml.nvmlDeviceGetMemoryInfo(handle).used / (1024 * 1024)
+                    )
+                except Exception:
+                    continue
+            if utils:
+                gpu_util = max(utils)
+                gpu_mem_mb = max(mem_values)
+
+        return {
+            "ram_mb": ram_mb,
+            "gpu_util_percent": gpu_util,
+            "gpu_memory_mb": gpu_mem_mb,
+        }
 
     def _run(self):
         processes = self._processes()
@@ -155,15 +192,13 @@ class ResourceSampler:
             result[f"{key}_avg"] = statistics.fmean(vals) if vals else None
             result[f"{key}_peak"] = max(vals) if vals else None
 
-        result["ram_before_mb"] = (
-            self.samples[0]["ram_mb"] if self.samples else None
-        )
-        result["ram_after_mb"] = (
-            self.samples[-1]["ram_mb"] if self.samples else None
-        )
+        after = self._snapshot()
+        result["ram_before_mb"] = self.before["ram_mb"] if self.before else None
+        result["ram_after_mb"] = after["ram_mb"]
         result["gpu_memory_before_mb"] = (
-            self.samples[0]["gpu_memory_mb"] if self.samples else None
+            self.before["gpu_memory_mb"] if self.before else None
         )
+        result["gpu_memory_after_mb"] = after["gpu_memory_mb"]
         return result
 
     def close(self):
@@ -275,6 +310,7 @@ def main():
             "gpu_util_peak_percent": resources["gpu_util_percent_peak"],
             "gpu_memory_before_mb": resources["gpu_memory_before_mb"],
             "gpu_memory_peak_mb": resources["gpu_memory_mb_peak"],
+            "gpu_memory_after_mb": resources["gpu_memory_after_mb"],
             "error": error,
         })
 
@@ -345,7 +381,8 @@ Reason codes:
 Notes:
 - Input video frame rate is unchanged; production sampling is 15 frames.
 - CPU/RAM are measured for --pid and its child processes when psutil is available.
-- GPU utilization is device-level when NVIDIA NVML is available.
+- GPU utilization and memory are device-level when NVIDIA NVML is available.
+- CPU/RAM values require --pid; without it they are unavailable rather than system-wide estimates.
 - Missing metrics are reported as unavailable; no values are fabricated.
 - Detailed per-request results: {csv_path}
 """
