@@ -1,4 +1,3 @@
-# app/verification/router.py
 from fastapi import APIRouter, File, Form, UploadFile
 
 from app.verification.view import verify_email_photo
@@ -19,8 +18,13 @@ async def verify_email_photo_endpoint(
     video_bytes = await live_photo.read()
 
     if len(video_bytes) > MAX_VIDEO_BYTES:
-        return {"verified": False, "is_match": False, "reason_code": "VIDEO_TOO_LARGE",
-                "reason": "Video is larger than 25 MB", "failed_checks": ["VIDEO_TOO_LARGE"]}
+        return {
+            "verified": False,
+            "is_match": False,
+            "reason_code": "VIDEO_TOO_LARGE",
+            "reason": "Video is larger than 25 MB",
+            "failed_checks": ["VIDEO_TOO_LARGE"],
+        }
 
     return await verify_email_photo(
         email,
