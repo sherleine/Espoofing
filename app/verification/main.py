@@ -31,7 +31,7 @@ log = logging.getLogger("app.verification")
 faces.load_models()
 anti_spoof.load_model()
 
-TARGET_FRAMES = 10              # frames sampled from the video (legacy mode)
+TARGET_FRAMES = 10              # frames sampled from the registration video
 MIN_FRAMES = 10                 # minimum frames decoded
 MIN_DURATION_SEC = 1.5
 
