@@ -1,0 +1,5 @@
+# Dependencies for the standalone verification benchmark only.
+# Do not add these to production requirements unless desired.
+psutil>=5.9
+requests>=2.31
+nvidia-ml-py>=12.0
