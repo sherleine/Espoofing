@@ -16,9 +16,9 @@ If --pid is omitted, the script still records request latency and can record
 system-level CPU/RAM when psutil is available. For per-server-process CPU/RAM,
 pass the PID of the uvicorn worker/process handling the requests.
 
-GPU metrics are reported when NVIDIA NVML is available. GPU utilization is
-device-level during the request; GPU memory is reported for the target process
-when NVML can associate it with the process.
+GPU metrics are reported when NVIDIA NVML is available. GPU utilization and
+memory are device-level measurements. They are not attributed to the target
+process.
 """
 
 from __future__ import annotations
@@ -119,31 +119,47 @@ class ResourceSampler:
             "gpu_memory_mb": gpu_mem_mb,
         }
 
-    def _run(self):
-        processes = self._processes()
+    def _cpu_time(self, processes):
+        if psutil is None:
+            return None
+
+        total = 0.0
+        found = False
         for p in processes:
             try:
-                p.cpu_percent(None)
+                times = p.cpu_times()
+                total += times.user + times.system
+                found = True
             except (psutil.NoSuchProcess, psutil.AccessDenied):
-                pass
+                continue
+        return total if found else None
+
+    def _run(self):
+        last_wall = time.perf_counter()
+        last_cpu = self._cpu_time(self._processes())
 
         while not self.stop_event.wait(SAMPLE_INTERVAL_SEC):
-            cpu = None
-            rss_mb = None
-
+            now = time.perf_counter()
             current = self._processes()
+            current_cpu = self._cpu_time(current)
+
+            cpu = None
+            if last_cpu is not None and current_cpu is not None:
+                wall_delta = now - last_wall
+                cpu_delta = current_cpu - last_cpu
+                if wall_delta > 0 and cpu_delta >= 0:
+                    # 100% means one fully utilized CPU core.
+                    cpu = (cpu_delta / wall_delta) * 100.0
+
+            rss_mb = None
             if current:
-                cpu_values = []
                 rss = 0
                 for p in current:
                     try:
-                        cpu_values.append(p.cpu_percent(None))
                         rss += p.memory_info().rss
                     except (psutil.NoSuchProcess, psutil.AccessDenied):
                         continue
-                if cpu_values:
-                    cpu = sum(cpu_values)
-                    rss_mb = rss / (1024 * 1024)
+                rss_mb = rss / (1024 * 1024)
 
             gpu_util = None
             gpu_mem_mb = None
@@ -169,6 +185,9 @@ class ResourceSampler:
                 "gpu_util_percent": gpu_util,
                 "gpu_memory_mb": gpu_mem_mb,
             })
+
+            last_wall = now
+            last_cpu = current_cpu
 
     def start(self):
         self.thread.start()
@@ -381,7 +400,8 @@ Reason codes:
 Notes:
 - Input video frame rate is unchanged; production sampling is 15 frames.
 - CPU/RAM are measured for --pid and its child processes when psutil is available.
-- GPU utilization and memory are device-level when NVIDIA NVML is available.
+- CPU process usage is calculated from process CPU-time deltas; 100% represents one fully utilized CPU core.
+- GPU utilization and memory are device-level when NVIDIA NVML is available; they are not process-specific.
 - CPU/RAM values require --pid; without it they are unavailable rather than system-wide estimates.
 - Missing metrics are reported as unavailable; no values are fabricated.
 - Detailed per-request results: {csv_path}
