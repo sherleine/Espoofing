@@ -1,0 +1,39 @@
+Frame sampling: 12
+Requests: 100
+
+Latency:
+Average: 5.593 sec
+Median: 5.567 sec
+P95: 6.612 sec
+Min: 4.680 sec
+Max: 7.782 sec
+
+CPU (target process and child processes):
+Average: 1334.293 %
+Peak: 1422.987 %
+
+RAM (target process and child processes):
+Average peak-per-request: 742.965 MB
+Peak: 756.965 MB
+
+GPU:
+Average utilization: 5.689 %
+Peak utilization: 12.875 %
+Average peak memory: 1056.401 MB
+Peak memory: 1120.367 MB
+
+Verification results:
+Verified: 100/100
+Failed: 0/100
+
+Reason codes:
+OK: 100
+
+Notes:
+- Input video frame rate is unchanged; server sampling is 12 frames.
+- CPU/RAM are measured for --pid and its child processes when psutil is available.
+- CPU process usage is calculated from process CPU-time deltas; 100% represents one fully utilized CPU core.
+- GPU utilization and memory are device-level when NVIDIA NVML is available; they are not process-specific.
+- CPU/RAM values require --pid; without it they are unavailable rather than system-wide estimates.
+- Missing metrics are reported as unavailable; no values are fabricated.
+- Detailed per-request results: benchmark_results\12frames_genuine\benchmark_100_requests.csv

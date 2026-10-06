@@ -1,0 +1,143 @@
+001/100: 5.978s status=200 verified=False reason=FACE_MISMATCH
+002/100: 5.006s status=200 verified=False reason=FACE_MISMATCH
+003/100: 4.692s status=200 verified=False reason=FACE_MISMATCH
+004/100: 5.446s status=200 verified=False reason=FACE_MISMATCH
+005/100: 5.871s status=200 verified=False reason=FACE_MISMATCH
+006/100: 5.013s status=200 verified=False reason=FACE_MISMATCH
+007/100: 5.315s status=200 verified=False reason=FACE_MISMATCH
+008/100: 5.019s status=200 verified=False reason=FACE_MISMATCH
+009/100: 5.401s status=200 verified=False reason=FACE_MISMATCH
+010/100: 5.733s status=200 verified=False reason=FACE_MISMATCH
+011/100: 6.456s status=200 verified=False reason=FACE_MISMATCH
+012/100: 5.624s status=200 verified=False reason=FACE_MISMATCH
+013/100: 5.680s status=200 verified=False reason=FACE_MISMATCH
+014/100: 6.144s status=200 verified=False reason=FACE_MISMATCH
+015/100: 4.597s status=200 verified=False reason=FACE_MISMATCH
+016/100: 6.992s status=200 verified=False reason=FACE_MISMATCH
+017/100: 5.942s status=200 verified=False reason=FACE_MISMATCH
+018/100: 6.046s status=200 verified=False reason=FACE_MISMATCH
+019/100: 5.663s status=200 verified=False reason=FACE_MISMATCH
+020/100: 5.802s status=200 verified=False reason=FACE_MISMATCH
+021/100: 5.952s status=200 verified=False reason=FACE_MISMATCH
+022/100: 6.015s status=200 verified=False reason=FACE_MISMATCH
+023/100: 4.921s status=200 verified=False reason=FACE_MISMATCH
+024/100: 5.275s status=200 verified=False reason=FACE_MISMATCH
+025/100: 6.034s status=200 verified=False reason=FACE_MISMATCH
+026/100: 5.512s status=200 verified=False reason=FACE_MISMATCH
+027/100: 5.447s status=200 verified=False reason=FACE_MISMATCH
+028/100: 5.176s status=200 verified=False reason=FACE_MISMATCH
+029/100: 5.242s status=200 verified=False reason=FACE_MISMATCH
+030/100: 5.854s status=200 verified=False reason=FACE_MISMATCH
+031/100: 5.941s status=200 verified=False reason=FACE_MISMATCH
+032/100: 5.653s status=200 verified=False reason=FACE_MISMATCH
+033/100: 5.905s status=200 verified=False reason=FACE_MISMATCH
+034/100: 6.401s status=200 verified=False reason=FACE_MISMATCH
+035/100: 6.183s status=200 verified=False reason=FACE_MISMATCH
+036/100: 5.778s status=200 verified=False reason=FACE_MISMATCH
+037/100: 6.562s status=200 verified=False reason=FACE_MISMATCH
+038/100: 5.236s status=200 verified=False reason=FACE_MISMATCH
+039/100: 5.831s status=200 verified=False reason=FACE_MISMATCH
+040/100: 5.267s status=200 verified=False reason=FACE_MISMATCH
+041/100: 6.303s status=200 verified=False reason=FACE_MISMATCH
+042/100: 5.548s status=200 verified=False reason=FACE_MISMATCH
+043/100: 6.247s status=200 verified=False reason=FACE_MISMATCH
+044/100: 5.773s status=200 verified=False reason=FACE_MISMATCH
+045/100: 6.227s status=200 verified=False reason=FACE_MISMATCH
+046/100: 5.178s status=200 verified=False reason=FACE_MISMATCH
+047/100: 5.166s status=200 verified=False reason=FACE_MISMATCH
+048/100: 5.886s status=200 verified=False reason=FACE_MISMATCH
+049/100: 5.823s status=200 verified=False reason=FACE_MISMATCH
+050/100: 5.002s status=200 verified=False reason=FACE_MISMATCH
+051/100: 4.882s status=200 verified=False reason=FACE_MISMATCH
+052/100: 5.307s status=200 verified=False reason=FACE_MISMATCH
+053/100: 5.377s status=200 verified=False reason=FACE_MISMATCH
+054/100: 5.546s status=200 verified=False reason=FACE_MISMATCH
+055/100: 5.023s status=200 verified=False reason=FACE_MISMATCH
+056/100: 5.615s status=200 verified=False reason=FACE_MISMATCH
+057/100: 5.528s status=200 verified=False reason=FACE_MISMATCH
+058/100: 6.811s status=200 verified=False reason=FACE_MISMATCH
+059/100: 5.046s status=200 verified=False reason=FACE_MISMATCH
+060/100: 4.988s status=200 verified=False reason=FACE_MISMATCH
+061/100: 5.894s status=200 verified=False reason=FACE_MISMATCH
+062/100: 5.014s status=200 verified=False reason=FACE_MISMATCH
+063/100: 5.134s status=200 verified=False reason=FACE_MISMATCH
+064/100: 5.769s status=200 verified=False reason=FACE_MISMATCH
+065/100: 5.068s status=200 verified=False reason=FACE_MISMATCH
+066/100: 4.831s status=200 verified=False reason=FACE_MISMATCH
+067/100: 5.740s status=200 verified=False reason=FACE_MISMATCH
+068/100: 5.295s status=200 verified=False reason=FACE_MISMATCH
+069/100: 6.326s status=200 verified=False reason=FACE_MISMATCH
+070/100: 5.634s status=200 verified=False reason=FACE_MISMATCH
+071/100: 6.645s status=200 verified=False reason=FACE_MISMATCH
+072/100: 6.017s status=200 verified=False reason=FACE_MISMATCH
+073/100: 5.481s status=200 verified=False reason=FACE_MISMATCH
+074/100: 5.912s status=200 verified=False reason=FACE_MISMATCH
+075/100: 5.916s status=200 verified=False reason=FACE_MISMATCH
+076/100: 6.232s status=200 verified=False reason=FACE_MISMATCH
+077/100: 5.911s status=200 verified=False reason=FACE_MISMATCH
+078/100: 5.128s status=200 verified=False reason=FACE_MISMATCH
+079/100: 6.073s status=200 verified=False reason=FACE_MISMATCH
+080/100: 5.723s status=200 verified=False reason=FACE_MISMATCH
+081/100: 7.590s status=200 verified=False reason=FACE_MISMATCH
+082/100: 5.564s status=200 verified=False reason=FACE_MISMATCH
+083/100: 5.550s status=200 verified=False reason=FACE_MISMATCH
+084/100: 5.590s status=200 verified=False reason=FACE_MISMATCH
+085/100: 5.951s status=200 verified=False reason=FACE_MISMATCH
+086/100: 5.920s status=200 verified=False reason=FACE_MISMATCH
+087/100: 6.866s status=200 verified=False reason=FACE_MISMATCH
+088/100: 6.054s status=200 verified=False reason=FACE_MISMATCH
+089/100: 6.091s status=200 verified=False reason=FACE_MISMATCH
+090/100: 6.384s status=200 verified=False reason=FACE_MISMATCH
+091/100: 5.751s status=200 verified=False reason=FACE_MISMATCH
+092/100: 4.946s status=200 verified=False reason=FACE_MISMATCH
+093/100: 5.111s status=200 verified=False reason=FACE_MISMATCH
+094/100: 6.281s status=200 verified=False reason=FACE_MISMATCH
+095/100: 5.326s status=200 verified=False reason=FACE_MISMATCH
+096/100: 5.682s status=200 verified=False reason=FACE_MISMATCH
+097/100: 5.848s status=200 verified=False reason=FACE_MISMATCH
+098/100: 5.168s status=200 verified=False reason=FACE_MISMATCH
+099/100: 5.592s status=200 verified=False reason=FACE_MISMATCH
+100/100: 6.072s status=200 verified=False reason=FACE_MISMATCH
+
+Frame sampling: 12
+Requests: 100
+
+Latency:
+Average: 5.690 sec
+Median: 5.703 sec
+P95: 6.566 sec
+Min: 4.597 sec
+Max: 7.590 sec
+
+CPU (target process and child processes):
+Average: 1328.933 %
+Peak: 1397.805 %
+
+RAM (target process and child processes):
+Average peak-per-request: 670.884 MB
+Peak: 755.488 MB
+
+GPU:
+Average utilization: 7.265 %
+Peak utilization: 14.580 %
+Average peak memory: 1016.346 MB
+Peak memory: 1211.219 MB
+
+Verification results:
+Verified: 0/100
+Failed: 100/100
+
+Reason codes:
+FACE_MISMATCH: 100
+
+Notes:
+- Input video frame rate is unchanged; server sampling is 12 frames.
+- CPU/RAM are measured for --pid and its child processes when psutil is available.
+- CPU process usage is calculated from process CPU-time deltas; 100% represents one fully utilized CPU core.
+- GPU utilization and memory are device-level when NVIDIA NVML is available; they are not process-specific.
+- CPU/RAM values require --pid; without it they are unavailable rather than system-wide estimates.
+- Missing metrics are reported as unavailable; no values are fabricated.
+- Detailed per-request results: benchmark_results\12frames_wrong_person\benchmark_100_requests.csv
+
+CSV: benchmark_results\12frames_wrong_person\benchmark_100_requests.csv
+Summary: benchmark_results\12frames_wrong_person\benchmark_100_summary.txt

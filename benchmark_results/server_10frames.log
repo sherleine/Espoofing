@@ -1,0 +1,608 @@
+INFO:     Started server process [16104]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+C:\Users\sgodinho\AppData\Roaming\Python\Python313\site-packages\insightface\utils\face_align.py:23: FutureWarning: `estimate` is deprecated since version 0.26 and will be removed in version 2.2. Please use `SimilarityTransform.from_estimate` class constructor instead.
+  tform.estimate(lmk, dst)
+2026-10-06 12:22:21,046 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5182
+INFO:     127.0.0.1:64344 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:22:35,692 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4597
+INFO:     127.0.0.1:64346 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:22:42,289 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=6367
+INFO:     127.0.0.1:64347 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:22:47,958 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5460
+INFO:     127.0.0.1:64348 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:22:53,374 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5221
+INFO:     127.0.0.1:64351 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:22:58,870 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5226
+INFO:     127.0.0.1:64352 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:04,483 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5348
+INFO:     127.0.0.1:64354 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:09,615 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4794
+INFO:     127.0.0.1:64357 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:14,878 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4984
+INFO:     127.0.0.1:64358 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:19,941 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4911
+INFO:     127.0.0.1:64359 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:24,834 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4654
+INFO:     127.0.0.1:64360 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:30,090 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5005
+INFO:     127.0.0.1:64361 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:35,898 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5561
+INFO:     127.0.0.1:64366 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:41,926 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5727
+INFO:     127.0.0.1:64367 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:47,709 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5571
+INFO:     127.0.0.1:64368 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:53,040 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5124
+INFO:     127.0.0.1:64372 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:23:58,339 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5061
+INFO:     127.0.0.1:64373 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:03,392 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4837
+INFO:     127.0.0.1:64374 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:08,697 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5008
+INFO:     127.0.0.1:64375 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:13,555 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4584
+INFO:     127.0.0.1:64378 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:19,511 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5554
+INFO:     127.0.0.1:64379 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:25,537 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5830
+INFO:     127.0.0.1:64380 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:31,827 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5997
+INFO:     127.0.0.1:64381 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:38,070 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5970
+INFO:     127.0.0.1:64382 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:43,183 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4778
+INFO:     127.0.0.1:64383 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:48,835 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5434
+INFO:     127.0.0.1:64384 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:53,638 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4591
+INFO:     127.0.0.1:64387 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:24:59,395 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5533
+INFO:     127.0.0.1:64388 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:04,701 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4968
+INFO:     127.0.0.1:64392 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:09,876 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4931
+INFO:     127.0.0.1:64393 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:15,863 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5652
+INFO:     127.0.0.1:64394 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:22,013 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5954
+INFO:     127.0.0.1:64397 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:27,407 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5111
+INFO:     127.0.0.1:64398 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:33,337 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5624
+INFO:     127.0.0.1:64399 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:39,201 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5549
+INFO:     127.0.0.1:64400 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:44,912 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5524
+INFO:     127.0.0.1:63347 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:50,421 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5245
+INFO:     127.0.0.1:63348 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:25:55,913 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5214
+INFO:     127.0.0.1:63351 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:00,840 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4714
+INFO:     127.0.0.1:57191 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:06,250 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5129
+INFO:     127.0.0.1:53736 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:11,469 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4978
+INFO:     127.0.0.1:53737 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:16,654 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4927
+INFO:     127.0.0.1:53738 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:21,388 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4475
+INFO:     127.0.0.1:53739 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:27,396 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5712
+INFO:     127.0.0.1:53740 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:32,519 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4844
+INFO:     127.0.0.1:53742 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:38,484 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5683
+INFO:     127.0.0.1:53745 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:43,408 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4687
+INFO:     127.0.0.1:53748 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:50,011 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=6374
+INFO:     127.0.0.1:53749 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:26:55,341 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5134
+INFO:     127.0.0.1:50603 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:01,442 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5900
+INFO:     127.0.0.1:50607 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:06,921 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5134
+INFO:     127.0.0.1:50608 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:12,855 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5676
+INFO:     127.0.0.1:50610 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:18,376 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5267
+INFO:     127.0.0.1:50613 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:23,597 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4935
+INFO:     127.0.0.1:50614 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:29,209 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5337
+INFO:     127.0.0.1:50615 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:34,690 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5252
+INFO:     127.0.0.1:50616 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:39,741 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4791
+INFO:     127.0.0.1:50617 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:45,898 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5881
+INFO:     127.0.0.1:50619 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:51,728 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5545
+INFO:     127.0.0.1:50621 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:27:56,980 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5018
+INFO:     127.0.0.1:60306 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:02,084 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4812
+INFO:     127.0.0.1:60307 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:08,401 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=6065
+INFO:     127.0.0.1:60310 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:13,977 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5373
+INFO:     127.0.0.1:60315 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:20,243 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5988
+INFO:     127.0.0.1:60320 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:25,465 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4982
+INFO:     127.0.0.1:60321 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:30,460 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4740
+INFO:     127.0.0.1:60322 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:36,082 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5361
+INFO:     127.0.0.1:60323 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:41,336 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4994
+INFO:     127.0.0.1:59531 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:46,566 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4931
+INFO:     127.0.0.1:59534 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:51,595 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4816
+INFO:     127.0.0.1:59535 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:28:57,100 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5278
+INFO:     127.0.0.1:59536 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:03,610 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=6248
+INFO:     127.0.0.1:50097 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:09,767 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5895
+INFO:     127.0.0.1:50099 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:15,275 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5265
+INFO:     127.0.0.1:57311 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:20,394 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4897
+INFO:     127.0.0.1:57316 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:26,674 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=6013
+INFO:     127.0.0.1:57318 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:31,661 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4776
+INFO:     127.0.0.1:57319 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:37,475 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5510
+INFO:     127.0.0.1:57320 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:43,073 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5379
+INFO:     127.0.0.1:57321 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:48,472 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5074
+INFO:     127.0.0.1:57325 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:53,876 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5146
+INFO:     127.0.0.1:59705 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:29:59,475 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5365
+INFO:     127.0.0.1:59715 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:04,811 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5112
+INFO:     127.0.0.1:59719 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:10,460 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5396
+INFO:     127.0.0.1:59720 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:16,323 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5607
+INFO:     127.0.0.1:59721 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:22,121 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5578
+INFO:     127.0.0.1:59722 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:27,500 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5166
+INFO:     127.0.0.1:59723 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:33,145 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5344
+INFO:     127.0.0.1:59724 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:38,897 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5561
+INFO:     127.0.0.1:59725 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:44,044 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4850
+INFO:     127.0.0.1:49310 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:49,434 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5120
+INFO:     127.0.0.1:49312 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:54,271 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4567
+INFO:     127.0.0.1:49313 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:30:59,796 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5145
+INFO:     127.0.0.1:57487 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:05,069 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4990
+INFO:     127.0.0.1:57488 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:10,334 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5012
+INFO:     127.0.0.1:57489 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:15,233 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4668
+INFO:     127.0.0.1:57490 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:20,071 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4624
+INFO:     127.0.0.1:57491 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:25,824 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5516
+INFO:     127.0.0.1:57492 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:30,788 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4667
+INFO:     127.0.0.1:57493 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:36,587 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=5520
+INFO:     127.0.0.1:57494 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:41,622 INFO app.verification Registration verified: exam=1 code=OK failed=[] similarity=0.7138 pad=LOW_RISK spoof_score=0.0001 ms=4754
+INFO:     127.0.0.1:57495 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:47,259 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4920
+INFO:     127.0.0.1:57497 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:52,644 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5148
+INFO:     127.0.0.1:57498 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:31:58,424 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5497
+INFO:     127.0.0.1:57501 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:03,524 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4903
+INFO:     127.0.0.1:57696 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:09,176 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5418
+INFO:     127.0.0.1:57697 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:14,839 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5451
+INFO:     127.0.0.1:57701 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:20,302 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5268
+INFO:     127.0.0.1:57702 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:25,887 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5328
+INFO:     127.0.0.1:57704 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:31,251 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5108
+INFO:     127.0.0.1:57705 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:36,451 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4922
+INFO:     127.0.0.1:57707 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:41,710 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4988
+INFO:     127.0.0.1:57708 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:47,076 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5111
+INFO:     127.0.0.1:57709 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:52,055 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4823
+INFO:     127.0.0.1:57710 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:32:57,423 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5118
+INFO:     127.0.0.1:57711 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:04,076 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=6384
+INFO:     127.0.0.1:57712 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:09,458 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5164
+INFO:     127.0.0.1:59045 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:15,422 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5720
+INFO:     127.0.0.1:59046 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:20,585 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4890
+INFO:     127.0.0.1:59047 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:25,215 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4431
+INFO:     127.0.0.1:59048 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:30,572 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5100
+INFO:     127.0.0.1:59049 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:35,615 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4826
+INFO:     127.0.0.1:59050 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:41,006 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5064
+INFO:     127.0.0.1:59051 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:45,377 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4115
+INFO:     127.0.0.1:59052 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:50,389 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4809
+INFO:     127.0.0.1:59053 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:55,275 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4657
+INFO:     127.0.0.1:59054 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:33:59,998 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4457
+INFO:     127.0.0.1:59057 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:05,503 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5292
+INFO:     127.0.0.1:59058 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:11,381 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5685
+INFO:     127.0.0.1:59059 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:16,200 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4590
+INFO:     127.0.0.1:59060 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:21,719 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5263
+INFO:     127.0.0.1:59064 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:27,106 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5197
+INFO:     127.0.0.1:59065 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:32,383 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5053
+INFO:     127.0.0.1:59066 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:37,678 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5033
+INFO:     127.0.0.1:59067 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:42,905 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5005
+INFO:     127.0.0.1:59068 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:48,198 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5020
+INFO:     127.0.0.1:59071 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:53,796 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5323
+INFO:     127.0.0.1:59072 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:34:59,311 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5263
+INFO:     127.0.0.1:59075 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:04,627 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5084
+INFO:     127.0.0.1:59076 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:09,998 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5096
+INFO:     127.0.0.1:59077 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:15,559 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5356
+INFO:     127.0.0.1:59078 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:20,953 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5190
+INFO:     127.0.0.1:57708 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:26,294 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5023
+INFO:     127.0.0.1:57709 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:33,033 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=6533
+INFO:     127.0.0.1:57710 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:38,691 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5299
+INFO:     127.0.0.1:57716 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:44,061 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5064
+INFO:     127.0.0.1:62063 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:49,709 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5420
+INFO:     127.0.0.1:62064 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:35:54,885 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4827
+INFO:     127.0.0.1:62065 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:00,390 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5263
+INFO:     127.0.0.1:56926 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:05,600 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4908
+INFO:     127.0.0.1:56928 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:10,265 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4431
+INFO:     127.0.0.1:56932 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:15,456 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4917
+INFO:     127.0.0.1:56935 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:20,043 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4364
+INFO:     127.0.0.1:56936 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:24,793 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4562
+INFO:     127.0.0.1:56937 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:30,299 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5272
+INFO:     127.0.0.1:56938 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:34,982 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4429
+INFO:     127.0.0.1:56939 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:40,129 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4866
+INFO:     127.0.0.1:56940 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:45,225 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4890
+INFO:     127.0.0.1:56941 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:50,072 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4720
+INFO:     127.0.0.1:56942 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:36:55,003 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4772
+INFO:     127.0.0.1:56943 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:00,128 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4885
+INFO:     127.0.0.1:56947 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:05,047 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4646
+INFO:     127.0.0.1:56948 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:10,030 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4774
+INFO:     127.0.0.1:56949 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:15,055 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4794
+INFO:     127.0.0.1:56951 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:20,819 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5492
+INFO:     127.0.0.1:56952 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:26,240 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5088
+INFO:     127.0.0.1:50464 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:31,733 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5272
+INFO:     127.0.0.1:63447 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:37,026 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5011
+INFO:     127.0.0.1:50725 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:42,053 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4762
+INFO:     127.0.0.1:50726 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:46,822 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4525
+INFO:     127.0.0.1:50728 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:52,197 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5134
+INFO:     127.0.0.1:50731 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:37:57,117 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4631
+INFO:     127.0.0.1:50732 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:02,008 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4662
+INFO:     127.0.0.1:50735 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:07,114 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4871
+INFO:     127.0.0.1:50739 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:11,929 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4587
+INFO:     127.0.0.1:50741 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:17,365 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5227
+INFO:     127.0.0.1:50742 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:22,748 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5154
+INFO:     127.0.0.1:50743 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:28,148 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5164
+INFO:     127.0.0.1:50744 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:33,395 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4950
+INFO:     127.0.0.1:50749 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:39,194 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5571
+INFO:     127.0.0.1:50750 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:44,584 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5092
+INFO:     127.0.0.1:50751 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:49,311 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4418
+INFO:     127.0.0.1:56333 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:38:54,809 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5203
+INFO:     127.0.0.1:56334 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:00,860 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5867
+INFO:     127.0.0.1:65003 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:06,229 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5130
+INFO:     127.0.0.1:65004 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:12,004 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5451
+INFO:     127.0.0.1:63018 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:17,190 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4980
+INFO:     127.0.0.1:63023 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:23,092 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5645
+INFO:     127.0.0.1:63026 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:27,707 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4363
+INFO:     127.0.0.1:63028 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:32,889 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4918
+INFO:     127.0.0.1:63036 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:38,119 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4984
+INFO:     127.0.0.1:63037 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:43,051 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4667
+INFO:     127.0.0.1:63038 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:49,111 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5840
+INFO:     127.0.0.1:63039 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:54,364 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5016
+INFO:     127.0.0.1:63042 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:39:59,545 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4925
+INFO:     127.0.0.1:61987 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:04,781 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5030
+INFO:     127.0.0.1:61988 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:10,585 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5485
+INFO:     127.0.0.1:61989 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:16,738 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=5911
+INFO:     127.0.0.1:61990 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:21,794 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4844
+INFO:     127.0.0.1:61991 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:26,841 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4829
+INFO:     127.0.0.1:61994 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:31,938 INFO app.verification Registration verified: exam=1 code=FACE_MISMATCH failed=['FACE_MISMATCH'] similarity=-0.0308 pad=LOW_RISK spoof_score=0.0001 ms=4851
+INFO:     127.0.0.1:61998 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:38,111 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5195
+INFO:     127.0.0.1:62002 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:43,978 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5567
+INFO:     127.0.0.1:49875 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:49,722 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5297
+INFO:     127.0.0.1:49876 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:40:55,782 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5767
+INFO:     127.0.0.1:49877 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:01,519 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5469
+INFO:     127.0.0.1:49883 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:07,900 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=6202
+INFO:     127.0.0.1:49886 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:13,952 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5776
+INFO:     127.0.0.1:49895 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:19,588 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5272
+INFO:     127.0.0.1:49896 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:24,688 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4801
+INFO:     127.0.0.1:49899 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:30,998 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5949
+INFO:     127.0.0.1:49900 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:36,633 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5328
+INFO:     127.0.0.1:49901 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:42,854 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5896
+INFO:     127.0.0.1:49902 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:48,789 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5651
+INFO:     127.0.0.1:49903 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:54,335 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5253
+INFO:     127.0.0.1:49904 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:41:59,922 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5295
+INFO:     127.0.0.1:57299 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:05,696 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5339
+INFO:     127.0.0.1:57303 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:11,632 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5547
+INFO:     127.0.0.1:57304 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:17,443 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5481
+INFO:     127.0.0.1:57305 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:23,231 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5462
+INFO:     127.0.0.1:57309 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:28,900 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5339
+INFO:     127.0.0.1:57311 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:34,269 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5080
+INFO:     127.0.0.1:57312 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:39,838 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5267
+INFO:     127.0.0.1:57313 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:46,115 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5994
+INFO:     127.0.0.1:57314 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:51,815 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5379
+INFO:     127.0.0.1:50461 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:42:57,300 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5212
+INFO:     127.0.0.1:50462 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:03,512 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5910
+INFO:     127.0.0.1:50464 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:09,339 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5541
+INFO:     127.0.0.1:50466 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:14,979 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5341
+INFO:     127.0.0.1:50468 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:20,446 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5166
+INFO:     127.0.0.1:50469 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:25,850 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5090
+INFO:     127.0.0.1:50470 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:32,694 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=6478
+INFO:     127.0.0.1:50471 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:38,213 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5171
+INFO:     127.0.0.1:50472 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:44,690 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=6141
+INFO:     127.0.0.1:50473 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:50,611 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5535
+INFO:     127.0.0.1:50474 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:43:56,477 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5513
+INFO:     127.0.0.1:50475 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:02,460 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5676
+INFO:     127.0.0.1:50476 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:07,799 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5035
+INFO:     127.0.0.1:50477 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:13,149 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5019
+INFO:     127.0.0.1:50479 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:19,414 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5930
+INFO:     127.0.0.1:65499 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:25,226 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5542
+INFO:     127.0.0.1:65500 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:30,530 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4963
+INFO:     127.0.0.1:65501 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:35,308 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4408
+INFO:     127.0.0.1:65502 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:40,884 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5206
+INFO:     127.0.0.1:65503 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:46,265 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5058
+INFO:     127.0.0.1:65504 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:51,707 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5209
+INFO:     127.0.0.1:65505 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:44:56,407 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4405
+INFO:     127.0.0.1:65506 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:01,591 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4915
+INFO:     127.0.0.1:65511 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:07,544 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5558
+INFO:     127.0.0.1:65513 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:12,628 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4767
+INFO:     127.0.0.1:65516 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:18,211 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5263
+INFO:     127.0.0.1:65519 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:24,102 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5608
+INFO:     127.0.0.1:65522 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:29,745 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5289
+INFO:     127.0.0.1:51894 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:37,690 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=7563
+INFO:     127.0.0.1:51901 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:43,707 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5735
+INFO:     127.0.0.1:50061 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:49,395 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5347
+INFO:     127.0.0.1:50062 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:45:55,228 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5521
+INFO:     127.0.0.1:50063 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:00,729 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5145
+INFO:     127.0.0.1:60266 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:06,628 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5580
+INFO:     127.0.0.1:60267 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:12,392 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5550
+INFO:     127.0.0.1:60269 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:18,466 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5778
+INFO:     127.0.0.1:60270 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:23,971 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5227
+INFO:     127.0.0.1:60271 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:29,075 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4807
+INFO:     127.0.0.1:60274 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:34,962 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5570
+INFO:     127.0.0.1:60275 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:40,872 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5567
+INFO:     127.0.0.1:60276 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:47,028 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5855
+INFO:     127.0.0.1:49680 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:52,700 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5412
+INFO:     127.0.0.1:49681 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:46:57,727 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4710
+INFO:     127.0.0.1:49682 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:03,473 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5516
+INFO:     127.0.0.1:49684 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:09,635 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5914
+INFO:     127.0.0.1:49685 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:15,410 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5465
+INFO:     127.0.0.1:49687 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:20,851 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5188
+INFO:     127.0.0.1:49688 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:26,655 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5517
+INFO:     127.0.0.1:49689 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:32,057 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5105
+INFO:     127.0.0.1:49690 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:38,140 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5798
+INFO:     127.0.0.1:49691 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:43,987 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5568
+INFO:     127.0.0.1:49692 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:49,943 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5616
+INFO:     127.0.0.1:49694 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:47:55,073 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4854
+INFO:     127.0.0.1:49695 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:00,236 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4867
+INFO:     127.0.0.1:49696 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:06,337 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5719
+INFO:     127.0.0.1:61765 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:11,963 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5372
+INFO:     127.0.0.1:56060 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:17,877 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5643
+INFO:     127.0.0.1:56061 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:23,945 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5775
+INFO:     127.0.0.1:57346 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:30,412 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=6141
+INFO:     127.0.0.1:57349 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:35,591 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4859
+INFO:     127.0.0.1:57351 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:42,422 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=6487
+INFO:     127.0.0.1:57352 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:47,798 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5106
+INFO:     127.0.0.1:57353 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:52,835 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4747
+INFO:     127.0.0.1:57354 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:48:58,204 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5080
+INFO:     127.0.0.1:57947 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:04,344 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5830
+INFO:     127.0.0.1:57950 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:10,147 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5469
+INFO:     127.0.0.1:57951 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:15,254 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=4781
+INFO:     127.0.0.1:57952 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:21,387 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5825
+INFO:     127.0.0.1:57953 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:26,764 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5099
+INFO:     127.0.0.1:59728 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:32,684 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5518
+INFO:     127.0.0.1:59729 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:38,069 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5066
+INFO:     127.0.0.1:59730 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:44,208 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5784
+INFO:     127.0.0.1:59731 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:49,852 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5365
+INFO:     127.0.0.1:59733 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:49:55,735 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5577
+INFO:     127.0.0.1:59189 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:50:01,102 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5121
+INFO:     127.0.0.1:59190 - "POST /verify-email-photo HTTP/1.1" 200 OK
+2026-10-06 12:50:06,665 INFO app.verification Registration verified: exam=1 code=SPOOF_SUSPECTED failed=['SPOOF_SUSPECTED', 'NO_HEAD_MOVEMENT', 'NO_FACIAL_MOVEMENT'] similarity=0.6904 pad=HIGH_RISK spoof_score=0.5786 ms=5195
+INFO:     127.0.0.1:51738 - "POST /verify-email-photo HTTP/1.1" 200 OK

@@ -253,6 +253,8 @@ def main():
     parser.add_argument("--pid", type=int, help="PID of the API server/worker")
     parser.add_argument("--requests", type=int, default=100)
     parser.add_argument("--output-dir", default="benchmark_results")
+    parser.add_argument("--frames", type=int, default=15,
+                        help="server TARGET_FRAMES, used only to label the summary")
     args = parser.parse_args()
 
     if requests is None:
@@ -363,7 +365,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
 
-    summary = f"""Frame sampling: 15
+    summary = f"""Frame sampling: {args.frames}
 Requests: {args.requests}
 
 Latency:
@@ -398,7 +400,7 @@ Reason codes:
 
     summary += f"""
 Notes:
-- Input video frame rate is unchanged; production sampling is 15 frames.
+- Input video frame rate is unchanged; server sampling is {args.frames} frames.
 - CPU/RAM are measured for --pid and its child processes when psutil is available.
 - CPU process usage is calculated from process CPU-time deltas; 100% represents one fully utilized CPU core.
 - GPU utilization and memory are device-level when NVIDIA NVML is available; they are not process-specific.
