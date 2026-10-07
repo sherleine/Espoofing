@@ -273,7 +273,7 @@ video (summarize, check_presence, consistency) and across exam windows
 (ExamTracker).
 """
 
-    SIMILARITY_THRESHOLD, build_template, largest, similarity)
+
 
 SAME_PERSON_THRESHOLD = 0.50    # every video face vs the video's mean face
 MIN_FACE_FRAME_RATIO = 0.6      # face must be visible in 60% of frames
