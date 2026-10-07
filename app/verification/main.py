@@ -15,14 +15,13 @@ from dataclasses import dataclass, field
 import cv2
 import numpy as np
 
-from app.verification import (
-    anti_spoof,
-    face_tracking,
-    face_verification,
-    faces,
-    registration_liveness,
-    risk_engine,
-)
+from app.verification import risk_engine
+from app.verification import verification_engine
+anti_spoof = verification_engine
+face_tracking = verification_engine
+face_verification = verification_engine
+faces = verification_engine
+registration_liveness = verification_engine
 
 log = logging.getLogger("app.verification")
 
