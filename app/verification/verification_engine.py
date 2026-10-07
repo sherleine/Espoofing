@@ -43,7 +43,7 @@ def load_models():
     app = FaceAnalysis(
         name="buffalo_l",
         allowed_modules=["detection", "landmark_3d_68", "recognition"],
-        providers=["CPUExecutionProvider"],
+        providers=["CUDAExecutionProvider", "CPUExecutionProvider"],
     )
     app.prepare(ctx_id=0, det_size=(640, 640))
     return app.det_model, app.models["landmark_3d_68"], app.models["recognition"]
@@ -675,7 +675,7 @@ def load_model():
         os.replace(tmp, MODEL_PATH)
     if hashlib.sha256(MODEL_PATH.read_bytes()).hexdigest() != MODEL_SHA256:
         raise RuntimeError(f"PAD model checksum mismatch: {MODEL_PATH}")
-    return ort.InferenceSession(str(MODEL_PATH), providers=["CPUExecutionProvider"])
+    return ort.InferenceSession(str(MODEL_PATH), providers=["CUDAExecutionProvider", "CPUExecutionProvider"])
 
 
 def _aligned_crop(frame, kps):
