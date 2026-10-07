@@ -1,7 +1,7 @@
 # app/verification/service.py
 """Kept so existing callers of verify_faces/extract_frames keep working."""
 
-from app.verification.faces import read_video
+from app.verification.verification_engine import read_video
 from app.verification.main import REASONS, TARGET_FRAMES, verify_registration  # noqa: F401
 
 
