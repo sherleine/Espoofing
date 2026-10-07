@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 from fastapi.concurrency import run_in_threadpool
 
-from app.verification import faces, main
+from app.verification import main, verification_engine
 from app.verification.service import verify_faces
 from app.monitor.session_store import mark_verified
 
@@ -168,7 +168,7 @@ def _clip_frames(clip_bytes: bytes, filename: str | None, content_type: str | No
     try:
         with os.fdopen(fd, "wb") as f:
             f.write(clip_bytes)
-        frames, _, _ = faces.read_video(path, main.EXAM_MAX_FRAMES)
+        frames, _, _ = verification_engine.read_video(path, main.EXAM_MAX_FRAMES)
         return frames
     finally:
         os.remove(path)
@@ -176,7 +176,7 @@ def _clip_frames(clip_bytes: bytes, filename: str | None, content_type: str | No
 
 def _window(session_id, images, clip):
     if images:
-        frames = faces.decode_images(images)
+        frames = verification_engine.decode_images(images)
     else:
         frames = _clip_frames(*clip)
     return main.process_exam_window(session_id, frames)
